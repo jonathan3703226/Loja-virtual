@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.produto {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 300px;
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.botao-finalizar {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+}
+
+#resumo {
+    margin-top: 20px;
+    border: 2px dashed #333;
+    padding: 15px;
+    width: 400px;
+    display: none;
+}

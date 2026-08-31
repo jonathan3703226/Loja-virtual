@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja Simples</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Loja de Eletrônicos</h1>
+
+    <div class="produto">
+        <p>Fone de Ouvido - R$ 250,00</p>
+        <button onclick="diminuir('qtd1')">-</button>
+        <span id="qtd1">0</span>
+        <button onclick="aumentar('qtd1')">+</button>
+    </div>
+
+    <div class="produto">
+        <p>Notebook - R$ 3500,00</p>
+        <button onclick="diminuir('qtd2')">-</button>
+        <span id="qtd2">0</span>
+        <button onclick="aumentar('qtd2')">+</button>
+    </div>
+
+    <div class="produto">
+        <p>Smart TV - R$ 2800,00</p>
+        <button onclick="diminuir('qtd3')">-</button>
+        <span id="qtd3">0</span>
+        <button onclick="aumentar('qtd3')">+</button>
+    </div>
+
+    <div class="produto">
+        <p>Caixa de Som - R$ 650,00</p>
+        <button onclick="diminuir('qtd4')">-</button>
+        <span id="qtd4">0</span>
+        <button onclick="aumentar('qtd4')">+</button>
+    </div>
+
+    <div class="produto">
+        <p>Videogame - R$ 2500,00</p>
+        <button onclick="diminuir('qtd5')">-</button>
+        <span id="qtd5">0</span>
+        <button onclick="aumentar('qtd5')">+</button>
+    </div>
+
+    <br>
+    <button class="botao-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+
+    <div id="resumo"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

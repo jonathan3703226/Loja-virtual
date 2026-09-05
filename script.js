@@ -4,6 +4,7 @@ function aumentar(idDoSpan) {
     elemento.innerText = valorAtual + 1;
 }
 
+
 function diminuir(idDoSpan) {
     let elemento = document.getElementById(idDoSpan);
     let valorAtual = parseInt(elemento.innerText);

@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Eletrônicos</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>TechStore - A Maior Loja de Eletrônicos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="navbar">
         <div class="container header-content">
-            <h1>TechStore</h1>
-            <button class="btn-cart" onclick="abrirCheckout()">
+            <h1 class="logo">TechStore ⚡</h1>
+            <button class="btn-cart-nav" onclick="abrirCarrinho()">
                 🛒 Carrinho <span id="cart-badge">0</span>
             </button>
         </div>
     </header>
 
     <main class="container">
-        <div class="produtos-grid" id="produtos-container">
-            </div>
+        <!-- Grid Onde os Produtos Vão Aparecer -->
+        <div class="produtos-grid" id="produtos-container"></div>
     </main>
 
+    <!-- Modal do Carrinho e Checkout -->
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content" id="modal-body">
-            </div>
+            <!-- O conteúdo (Carrinho ou Pagamento) será injetado aqui -->
+        </div>
     </div>
+
+    <!-- Toast de Notificação (Aviso verde quando adiciona item) -->
+    <div id="toast" class="toast">Produto adicionado ao carrinho!</div>
 
     <script src="script.js"></script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Produtos</title>
+    <title>TechStore - E-commerce</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,20 +11,12 @@
     <header class="navbar">
         <div class="container header-content">
             <h1>TechStore</h1>
-            <!-- Redireciona para a página do carrinho -->
-            <a href="carrinho.html" class="btn-cart">
-                🛒 Carrinho <span id="cart-badge">0</span>
-            </a>
         </div>
     </header>
 
-    <main class="container">
-        <div class="lista-produtos" id="produtos-lista">
-            <!-- JS injeta os produtos aqui em formato de lista (um sobre o outro) -->
-        </div>
+    <main class="container" id="app">
+        <!-- O JS vai injetar os produtos e o resumo aqui -->
     </main>
-
-    <div id="toast" class="toast">Adicionado ao carrinho!</div>
 
     <script src="script.js"></script>
 </body>

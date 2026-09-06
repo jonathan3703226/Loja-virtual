@@ -2,7 +2,7 @@
     --primary: #0f172a;
     --primary-hover: #1e293b;
     --accent: #3b82f6;
-    --bg: #f8fafc;
+    --bg: #f1f5f9;
     --card: #ffffff;
     --text: #334155;
     --border: #e2e8f0;
@@ -10,40 +10,79 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 body { background-color: var(--bg); color: var(--text); padding-bottom: 60px; }
-.container { max-width: 800px; /* Largura focada para layout de 1 coluna */ margin: 0 auto; padding: 0 20px; }
-a { text-decoration: none; }
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
 /* Header */
-.navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 0; margin-bottom: 30px; position: sticky; top: 0; z-index: 100; }
-.header-content { display: flex; justify-content: space-between; align-items: center; }
-.header-content h1 { color: var(--primary); font-size: 1.5rem; }
-.btn-cart { background: var(--primary); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-.btn-cart:hover { background: var(--primary-hover); }
-#cart-badge { background: var(--accent); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem; }
+.navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px 0; margin-bottom: 30px; text-align: center; }
+.navbar h1 { color: var(--primary); font-size: 1.8rem; }
 
-/* Lista de Produtos (Um sobre o outro) */
-.lista-produtos { display: flex; flex-direction: column; gap: 20px; }
-.produto-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+/* Grid de Produtos */
+.grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
 
-.produto-topo { display: flex; justify-content: space-between; align-items: flex-start; }
-.produto-info h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: 5px; }
-.produto-preco { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
-.btn-add { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.produto-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
 
-/* Área Expansível (Acordeão) */
-.btn-expandir { background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer; text-align: left; padding: 5px 0; }
-.desc-conteudo { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: #64748b; font-size: 0.95rem; line-height: 1.5; }
-.desc-conteudo.aberto { max-height: 200px; /* Altura suficiente para mostrar o texto */ margin-top: 10px; }
+.produto-card:hover { transform: translateY(-5px); }
 
-/* Carrinho.html */
-.lista-carrinho { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; margin-bottom: 30px; }
-.item-carrinho { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--border); }
-.item-controles { display: flex; align-items: center; gap: 15px; }
-.btn-qtd { background: var(--bg); border: 1px solid var(--border); width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-.resumo-box { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); text-align: right; }
-.total-texto { font-size: 1.5rem; margin-bottom: 20px; }
-.btn-finalizar { background: #10b981; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; }
+.produto-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border);
+}
 
-/* Toast */
-.toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; transition: bottom 0.3s; z-index: 1000; }
-.toast.show { bottom: 30px; }
+.produto-info { padding: 20px; text-align: center; }
+.produto-info h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: 10px; }
+.produto-preco { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 15px; }
+
+/* Controles de Quantidade */
+.controle-qtd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background: var(--bg);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.btn-qtd { background: white; border: 1px solid var(--border); width: 35px; height: 35px; border-radius: 6px; font-size: 1.2rem; font-weight: bold; cursor: pointer; color: var(--text); transition: 0.2s; }
+.btn-qtd:hover { background: var(--border); }
+.qtd-display { font-size: 1.2rem; font-weight: bold; width: 30px; }
+
+/* Botão Finalizar */
+.area-finalizar { text-align: center; margin-top: 30px; }
+.btn-finalizar { background: #10b981; color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+.btn-finalizar:hover { background: #059669; }
+
+/* Tela de Resumo */
+.resumo-container { background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.resumo-container h2 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 1.8rem; }
+
+.tabela-resumo { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+.tabela-resumo th, .tabela-resumo td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
+.tabela-resumo th { background: var(--bg); font-weight: 600; color: var(--primary); }
+
+.totais-box { background: var(--bg); padding: 25px; border-radius: 8px; text-align: right; line-height: 1.8; font-size: 1.1rem; }
+.desconto { color: #ef4444; }
+.total-final { font-size: 1.8rem; color: #10b981; margin-top: 15px; border-top: 2px dashed var(--border); padding-top: 15px; }
+
+.btn-voltar { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 6px; font-size: 1rem; cursor: pointer; margin-top: 20px; display: block; margin-left: auto; margin-right: auto; }
+.btn-voltar:hover { background: var(--primary-hover); }
+
+/* Responsividade para telas menores (Celular) */
+@media (max-width: 600px) {
+    .tabela-resumo th, .tabela-resumo td { padding: 10px 5px; font-size: 0.9rem; }
+    .totais-box { text-align: center; }
+}

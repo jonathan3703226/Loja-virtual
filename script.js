@@ -1,177 +1,206 @@
-// Banco de dados simulado com imagens (utilizando imagens gratuitas do Unsplash)
+// 1. BANCO DE DADOS REALISTA
 const produtos = [
-    { id: 1, nome: "Fone de Ouvido", preco: 250, imagem: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
-    { id: 2, nome: "Notebook", preco: 3500, imagem: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80" },
-    { id: 3, nome: "Smart TV", preco: 2800, imagem: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" },
-    { id: 4, nome: "Caixa de Som", preco: 650, imagem: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80" },
-    { id: 5, nome: "Videogame", preco: 2500, imagem: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&q=80" }
+    { 
+        id: 1, 
+        nome: "Fone de Ouvido Bluetooth JBL Tune 520BT Preto - Bateria para até 57 horas", 
+        preco: 250.90, 
+        imagem: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
+        estrelas: "★★★★★", avaliacoes: 450, freteGratis: true
+    },
+    { 
+        id: 2, 
+        nome: "Notebook Gamer Acer Nitro 5 Intel Core i5 8GB RAM 512GB SSD 15.6' Win 11", 
+        preco: 3500.00, 
+        imagem: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80",
+        estrelas: "★★★★☆", avaliacoes: 120, freteGratis: true
+    },
+    { 
+        id: 3, 
+        nome: "Smart TV 55 polegadas Samsung 4K Crystal UHD CU8000, Alexa built-in", 
+        preco: 2800.00, 
+        imagem: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80",
+        estrelas: "★★★★★", avaliacoes: 890, freteGratis: true
+    },
+    { 
+        id: 4, 
+        nome: "Caixa De Som Portátil Jbl Charge 5 Bluetooth À Prova D'água - Preta", 
+        preco: 650.00, 
+        imagem: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80",
+        estrelas: "★★★★★", avaliacoes: 300, freteGratis: false
+    },
+    { 
+        id: 5, 
+        nome: "Console PlayStation 5 (PS5) com Leitor de Disco + Controle DualSense", 
+        preco: 4200.00, 
+        imagem: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&q=80",
+        estrelas: "★★★★★", avaliacoes: 2150, freteGratis: true
+    }
 ];
 
-// Estado do carrinho (guarda a quantidade de cada ID)
-let carrinho = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+// 2. ESTADO DO CARRINHO
+let carrinho = {}; // Começa vazio. Exemplo de como ficará: { '1': 2, '3': 1 }
 
-// Função para renderizar os produtos na tela
+// 3. RENDERIZAR OS PRODUTOS
 function renderizarProdutos() {
     const container = document.getElementById('produtos-container');
     container.innerHTML = '';
 
     produtos.forEach(produto => {
+        // Operador ternário para mostrar ou não o Frete Grátis
+        const tagFrete = produto.freteGratis ? `<p class="frete-gratis">⚡ Frete Grátis</p>` : `<p style="height: 25px;"></p>`;
+
         container.innerHTML += `
             <div class="produto-card">
-                <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+                <img src="${produto.imagem}" alt="Imagem do produto" class="produto-img">
                 <div class="produto-info">
-                    <h3>${produto.nome}</h3>
-                    <p class="produto-preco">R$ ${produto.preco.toFixed(2).replace('.', ',')}</p>
-                    
-                    <div class="controles-qtd">
-                        <button class="btn-qtd" onclick="alterarQuantidade(${produto.id}, -1)">-</button>
-                        <span class="qtd-display" id="qtd-${produto.id}">${carrinho[produto.id]}</span>
-                        <button class="btn-qtd" onclick="alterarQuantidade(${produto.id}, 1)">+</button>
-                    </div>
+                    <p class="produto-nome" title="${produto.nome}">${produto.nome}</p>
+                    <p class="avaliacoes">${produto.estrelas} (${produto.avaliacoes})</p>
+                    <p class="produto-preco">${formatarMoeda(produto.preco)}</p>
+                    ${tagFrete}
+                </div>
+                <div class="botoes-acao">
+                    <button class="btn-comprar" onclick="comprarAgora(${produto.id})">Comprar agora</button>
+                    <button class="btn-adicionar" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao carrinho</button>
                 </div>
             </div>
         `;
     });
 }
 
-// Função para aumentar ou diminuir a quantidade
-function alterarQuantidade(id, delta) {
-    if (carrinho[id] + delta >= 0) {
-        carrinho[id] += delta;
-        document.getElementById(`qtd-${id}`).innerText = carrinho[id];
-        atualizarBadgeCarrinho();
-    }
+function formatarMoeda(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Atualiza o contador de itens no cabeçalho
-function atualizarBadgeCarrinho() {
-    const totalItens = Object.values(carrinho).reduce((acc, curr) => acc + curr, 0);
+// 4. LÓGICA DE CARRINHO E COMPRA
+function adicionarAoCarrinho(idProduto) {
+    // Se o produto já existe no carrinho, soma 1. Se não, cria com valor 1.
+    if (carrinho[idProduto]) {
+        carrinho[idProduto] += 1;
+    } else {
+        carrinho[idProduto] = 1;
+    }
+    atualizarBadge();
+    mostrarToast();
+}
+
+function comprarAgora(idProduto) {
+    adicionarAoCarrinho(idProduto);
+    abrirCarrinho(); // Redireciona imediatamente para o carrinho/pagamento
+}
+
+function atualizarBadge() {
+    // Soma todas as quantidades dentro do objeto carrinho
+    const totalItens = Object.values(carrinho).reduce((acc, qtd) => acc + qtd, 0);
     document.getElementById('cart-badge').innerText = totalItens;
 }
 
-// Formata valores para o padrão Real (R$)
-function formatarMoeda(valor) {
-    return `R$ ${valor.toFixed(2).replace('.', ',')}`;
+// 5. ANIMAÇÃO DO TOAST (Avisozinho verde na tela)
+function mostrarToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2500); // Some após 2.5 segundos
 }
 
-// Funções de manipulação do Modal
-function abrirModal(htmlContent) {
-    const overlay = document.getElementById('modal-overlay');
-    const modalBody = document.getElementById('modal-body');
-    modalBody.innerHTML = htmlContent;
-    overlay.classList.add('active');
+// 6. GESTÃO DO MODAL E CHECKOUT
+function abrirModal(html) {
+    document.getElementById('modal-body').innerHTML = html;
+    document.getElementById('modal-overlay').classList.add('active');
 }
 
 function fecharModal() {
     document.getElementById('modal-overlay').classList.remove('active');
 }
 
-// Fluxo de Checkout (Substitui o alert, o prompt e a injeção na div)
-function abrirCheckout() {
-    const totalItens = Object.values(carrinho).reduce((acc, curr) => acc + curr, 0);
+function abrirCarrinho() {
+    const totalItens = Object.values(carrinho).reduce((acc, qtd) => acc + qtd, 0);
 
-    // Se o carrinho estiver vazio, mostra um alerta customizado
     if (totalItens === 0) {
         abrirModal(`
-            <div class="modal-header">
-                <h2>Carrinho Vazio</h2>
-                <button class="btn-close" onclick="fecharModal()">&times;</button>
-            </div>
-            <p>Você precisa adicionar pelo menos um produto ao carrinho antes de finalizar a compra.</p>
+            <div class="modal-header"><h2>Seu carrinho está vazio</h2><button class="btn-close" onclick="fecharModal()">&times;</button></div>
+            <p>Descubra as melhores ofertas na página inicial!</p>
         `);
         return;
     }
 
-    let subtotalGeral = 0;
-    let resumoHtml = `<div class="modal-header">
-                        <h2>Resumo do Pedido</h2>
-                        <button class="btn-close" onclick="fecharModal()">&times;</button>
-                      </div>`;
+    let subtotal = 0;
+    let htmlItens = '';
 
-    produtos.forEach(produto => {
-        const qtd = carrinho[produto.id];
-        if (qtd > 0) {
-            const subtotalItem = qtd * produto.preco;
-            subtotalGeral += subtotalItem;
-            resumoHtml += `
-                <div class="resumo-item">
-                    <span>${qtd}x ${produto.nome}</span>
-                    <span>${formatarMoeda(subtotalItem)}</span>
+    // Passa pelos IDs no carrinho para gerar a lista
+    for (const id in carrinho) {
+        const quantidade = carrinho[id];
+        // Procura o produto original pelo ID
+        const produto = produtos.find(p => p.id == id);
+        subtotal += produto.preco * quantidade;
+
+        htmlItens += `
+            <div class="item-carrinho">
+                <div class="item-info">
+                    <strong>${produto.nome.substring(0, 25)}...</strong><br>
+                    ${formatarMoeda(produto.preco)}
                 </div>
-            `;
-        }
-    });
-
-    resumoHtml += `
-        <div class="totais">
-            <div class="resumo-item">
-                <strong>Subtotal:</strong>
-                <strong id="modal-subtotal" data-valor="${subtotalGeral}">${formatarMoeda(subtotalGeral)}</strong>
+                <div class="item-controles">
+                    <button class="btn-qtd" onclick="alterarQtdCarrinho(${id}, -1)">-</button>
+                    <span>${quantidade}</span>
+                    <button class="btn-qtd" onclick="alterarQtdCarrinho(${id}, 1)">+</button>
+                </div>
             </div>
-            <div class="resumo-item text-success" id="linha-desconto" style="display: none;">
-                <strong>Desconto (10% à vista):</strong>
-                <strong id="modal-desconto">- R$ 0,00</strong>
-            </div>
-            <div class="resumo-item" style="font-size: 1.2rem; margin-top: 10px;">
-                <strong>Total Final:</strong>
-                <strong id="modal-total">${formatarMoeda(subtotalGeral)}</strong>
-            </div>
-        </div>
-
-        <select id="forma-pagamento" class="select-pagamento" onchange="calcularDesconto()">
-            <option value="0">Selecione o pagamento...</option>
-            <option value="1">À vista (10% de desconto em compras acima de R$ 5k)</option>
-            <option value="2">Cartão de Débito</option>
-            <option value="3">Cartão de Crédito</option>
-        </select>
-
-        <button class="btn-finalizar" onclick="concluirCompra()">Confirmar Pagamento</button>
-    `;
-
-    abrirModal(resumoHtml);
-}
-
-// Calcula dinamicamente o desconto no modal com base na seleção
-function calcularDesconto() {
-    const opcao = document.getElementById('forma-pagamento').value;
-    const subtotal = parseFloat(document.getElementById('modal-subtotal').getAttribute('data-valor'));
-    
-    let desconto = 0;
-    
-    // Regra: Compras a partir de 5000 pagos à vista (opção 1) recebem 10% de desconto
-    if (subtotal >= 5000 && opcao === "1") {
-        desconto = subtotal * 0.10;
-        document.getElementById('linha-desconto').style.display = 'flex';
-        document.getElementById('modal-desconto').innerText = `- ${formatarMoeda(desconto)}`;
-    } else {
-        document.getElementById('linha-desconto').style.display = 'none';
+        `;
     }
-
-    const totalFinal = subtotal - desconto;
-    document.getElementById('modal-total').innerText = formatarMoeda(totalFinal);
-}
-
-// Tela de sucesso final
-function concluirCompra() {
-    const opcao = document.getElementById('forma-pagamento').value;
-    if (opcao === "0") {
-        alert("Por favor, selecione uma forma de pagamento para continuar."); // Alert simples de segurança
-        return;
-    }
-
-    // Zera o carrinho após o sucesso
-    carrinho = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    renderizarProdutos();
-    atualizarBadgeCarrinho();
 
     abrirModal(`
         <div class="modal-header">
-            <h2 class="text-success">Compra Realizada! 🎉</h2>
+            <h2>Carrinho de Compras</h2>
             <button class="btn-close" onclick="fecharModal()">&times;</button>
         </div>
-        <p>Obrigado por comprar na TechStore. O seu pedido está sendo processado e logo será enviado.</p>
+        ${htmlItens}
+        <div style="margin-top: 20px; font-size: 1.2rem; display: flex; justify-content: space-between;">
+            <strong>Total:</strong> <strong>${formatarMoeda(subtotal)}</strong>
+        </div>
+        <button onclick="irParaPagamento()" style="width:100%; background:var(--primary-color); color:white; padding:15px; border:none; border-radius:8px; margin-top:15px; font-weight:bold; cursor:pointer;">Continuar Compra</button>
     `);
 }
 
-// Inicia a aplicação renderizando os produtos
+function alterarQtdCarrinho(id, delta) {
+    if (carrinho[id] + delta > 0) {
+        carrinho[id] += delta;
+    } else {
+        delete carrinho[id]; // Se chegar a 0, remove do carrinho
+    }
+    atualizarBadge();
+    abrirCarrinho(); // Recarrega a tela do carrinho ao vivo
+}
+
+function irParaPagamento() {
+    abrirModal(`
+        <div class="modal-header">
+            <h2>Pagamento</h2>
+            <button class="btn-close" onclick="fecharModal()">&times;</button>
+        </div>
+        <p style="margin-bottom: 10px;">Como você prefere pagar?</p>
+        <select id="forma-pag" style="width:100%; padding: 10px; border-radius:6px; border: 1px solid #ccc; margin-bottom: 20px;">
+            <option value="pix">PIX (Aprovação imediata)</option>
+            <option value="cartao">Cartão de Crédito (Até 12x)</option>
+            <option value="boleto">Boleto Bancário</option>
+        </select>
+        <button onclick="finalizarCompraReal()" style="width:100%; background:var(--success-color); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Confirmar Pedido</button>
+        <button onclick="abrirCarrinho()" style="width:100%; background:transparent; color:var(--primary-color); padding:10px; border:none; margin-top:10px; cursor:pointer;">Voltar ao Carrinho</button>
+    `);
+}
+
+function finalizarCompraReal() {
+    carrinho = {}; // Zera tudo
+    atualizarBadge();
+    abrirModal(`
+        <div class="modal-header">
+            <h2 style="color: var(--success-color)">Pedido Confirmado! 🎉</h2>
+            <button class="btn-close" onclick="fecharModal()">&times;</button>
+        </div>
+        <p>Sua compra foi aprovada e já estamos separando o seu pacote.</p>
+        <p style="margin-top: 10px; color: var(--text-muted);">Você receberá o código de rastreio por e-mail.</p>
+    `);
+}
+
+// Inicia a aplicação
 renderizarProdutos();

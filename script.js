@@ -1,74 +1,177 @@
-function aumentar(idDoSpan) {
-    let elemento = document.getElementById(idDoSpan);
-    let valorAtual = parseInt(elemento.innerText);
-    elemento.innerText = valorAtual + 1;
+// Banco de dados simulado com imagens (utilizando imagens gratuitas do Unsplash)
+const produtos = [
+    { id: 1, nome: "Fone de Ouvido", preco: 250, imagem: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
+    { id: 2, nome: "Notebook", preco: 3500, imagem: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80" },
+    { id: 3, nome: "Smart TV", preco: 2800, imagem: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" },
+    { id: 4, nome: "Caixa de Som", preco: 650, imagem: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80" },
+    { id: 5, nome: "Videogame", preco: 2500, imagem: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&q=80" }
+];
+
+// Estado do carrinho (guarda a quantidade de cada ID)
+let carrinho = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+// Função para renderizar os produtos na tela
+function renderizarProdutos() {
+    const container = document.getElementById('produtos-container');
+    container.innerHTML = '';
+
+    produtos.forEach(produto => {
+        container.innerHTML += `
+            <div class="produto-card">
+                <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+                <div class="produto-info">
+                    <h3>${produto.nome}</h3>
+                    <p class="produto-preco">R$ ${produto.preco.toFixed(2).replace('.', ',')}</p>
+                    
+                    <div class="controles-qtd">
+                        <button class="btn-qtd" onclick="alterarQuantidade(${produto.id}, -1)">-</button>
+                        <span class="qtd-display" id="qtd-${produto.id}">${carrinho[produto.id]}</span>
+                        <button class="btn-qtd" onclick="alterarQuantidade(${produto.id}, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
 }
 
+// Função para aumentar ou diminuir a quantidade
+function alterarQuantidade(id, delta) {
+    if (carrinho[id] + delta >= 0) {
+        carrinho[id] += delta;
+        document.getElementById(`qtd-${id}`).innerText = carrinho[id];
+        atualizarBadgeCarrinho();
+    }
+}
 
-function diminuir(idDoSpan) {
-    let elemento = document.getElementById(idDoSpan);
-    let valorAtual = parseInt(elemento.innerText);
+// Atualiza o contador de itens no cabeçalho
+function atualizarBadgeCarrinho() {
+    const totalItens = Object.values(carrinho).reduce((acc, curr) => acc + curr, 0);
+    document.getElementById('cart-badge').innerText = totalItens;
+}
+
+// Formata valores para o padrão Real (R$)
+function formatarMoeda(valor) {
+    return `R$ ${valor.toFixed(2).replace('.', ',')}`;
+}
+
+// Funções de manipulação do Modal
+function abrirModal(htmlContent) {
+    const overlay = document.getElementById('modal-overlay');
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = htmlContent;
+    overlay.classList.add('active');
+}
+
+function fecharModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// Fluxo de Checkout (Substitui o alert, o prompt e a injeção na div)
+function abrirCheckout() {
+    const totalItens = Object.values(carrinho).reduce((acc, curr) => acc + curr, 0);
+
+    // Se o carrinho estiver vazio, mostra um alerta customizado
+    if (totalItens === 0) {
+        abrirModal(`
+            <div class="modal-header">
+                <h2>Carrinho Vazio</h2>
+                <button class="btn-close" onclick="fecharModal()">&times;</button>
+            </div>
+            <p>Você precisa adicionar pelo menos um produto ao carrinho antes de finalizar a compra.</p>
+        `);
+        return;
+    }
+
+    let subtotalGeral = 0;
+    let resumoHtml = `<div class="modal-header">
+                        <h2>Resumo do Pedido</h2>
+                        <button class="btn-close" onclick="fecharModal()">&times;</button>
+                      </div>`;
+
+    produtos.forEach(produto => {
+        const qtd = carrinho[produto.id];
+        if (qtd > 0) {
+            const subtotalItem = qtd * produto.preco;
+            subtotalGeral += subtotalItem;
+            resumoHtml += `
+                <div class="resumo-item">
+                    <span>${qtd}x ${produto.nome}</span>
+                    <span>${formatarMoeda(subtotalItem)}</span>
+                </div>
+            `;
+        }
+    });
+
+    resumoHtml += `
+        <div class="totais">
+            <div class="resumo-item">
+                <strong>Subtotal:</strong>
+                <strong id="modal-subtotal" data-valor="${subtotalGeral}">${formatarMoeda(subtotalGeral)}</strong>
+            </div>
+            <div class="resumo-item text-success" id="linha-desconto" style="display: none;">
+                <strong>Desconto (10% à vista):</strong>
+                <strong id="modal-desconto">- R$ 0,00</strong>
+            </div>
+            <div class="resumo-item" style="font-size: 1.2rem; margin-top: 10px;">
+                <strong>Total Final:</strong>
+                <strong id="modal-total">${formatarMoeda(subtotalGeral)}</strong>
+            </div>
+        </div>
+
+        <select id="forma-pagamento" class="select-pagamento" onchange="calcularDesconto()">
+            <option value="0">Selecione o pagamento...</option>
+            <option value="1">À vista (10% de desconto em compras acima de R$ 5k)</option>
+            <option value="2">Cartão de Débito</option>
+            <option value="3">Cartão de Crédito</option>
+        </select>
+
+        <button class="btn-finalizar" onclick="concluirCompra()">Confirmar Pagamento</button>
+    `;
+
+    abrirModal(resumoHtml);
+}
+
+// Calcula dinamicamente o desconto no modal com base na seleção
+function calcularDesconto() {
+    const opcao = document.getElementById('forma-pagamento').value;
+    const subtotal = parseFloat(document.getElementById('modal-subtotal').getAttribute('data-valor'));
     
-    if (valorAtual > 0) {
-        elemento.innerText = valorAtual - 1;
-    }
-}
-
-function finalizarCompra() {
-    let q1 = parseInt(document.getElementById('qtd1').innerText);
-    let q2 = parseInt(document.getElementById('qtd2').innerText);
-    let q3 = parseInt(document.getElementById('qtd3').innerText);
-    let q4 = parseInt(document.getElementById('qtd4').innerText);
-    let q5 = parseInt(document.getElementById('qtd5').innerText);
-
-    let totalDeItens = q1 + q2 + q3 + q4 + q5;
-    if (totalDeItens === 0) {
-        alert("Nenhum produto foi selecionado.");
-        return;
-    }
-
-    let sub1 = q1 * 250;
-    let sub2 = q2 * 3500;
-    let sub3 = q3 * 2800;
-    let sub4 = q4 * 650;
-    let sub5 = q5 * 2500;
-
-    let totalCompra = sub1 + sub2 + sub3 + sub4 + sub5;
-
-    let opcao = prompt("Forma de pagamento:\n1 - À vista\n2 - Cartão de débito\n3 - Cartão de crédito");
-
-    if (opcao !== "1" && opcao !== "2" && opcao !== "3") {
-        alert("Opção inválida!");
-        return;
-    }
-
-    let nomePagamento = "";
-    if (opcao === "1") nomePagamento = "À vista";
-    if (opcao === "2") nomePagamento = "Cartão de débito";
-    if (opcao === "3") nomePagamento = "Cartão de crédito";
-
     let desconto = 0;
-    if (totalCompra >= 5000 && opcao === "1") {
-        desconto = totalCompra * 0.10;
+    
+    // Regra: Compras a partir de 5000 pagos à vista (opção 1) recebem 10% de desconto
+    if (subtotal >= 5000 && opcao === "1") {
+        desconto = subtotal * 0.10;
+        document.getElementById('linha-desconto').style.display = 'flex';
+        document.getElementById('modal-desconto').innerText = `- ${formatarMoeda(desconto)}`;
+    } else {
+        document.getElementById('linha-desconto').style.display = 'none';
     }
 
-    let totalAPagar = totalCompra - desconto;
-
-    let texto = "<h2>Resumo da Compra</h2>";
-    
-    if (q1 > 0) texto += "<p>Fone de Ouvido: " + q1 + "x - Subtotal: R$ " + sub1 + ",00</p>";
-    if (q2 > 0) texto += "<p>Notebook: " + q2 + "x - Subtotal: R$ " + sub2 + ",00</p>";
-    if (q3 > 0) texto += "<p>Smart TV: " + q3 + "x - Subtotal: R$ " + sub3 + ",00</p>";
-    if (q4 > 0) texto += "<p>Caixa de Som: " + q4 + "x - Subtotal: R$ " + sub4 + ",00</p>";
-    if (q5 > 0) texto += "<p>Videogame: " + q5 + "x - Subtotal: R$ " + sub5 + ",00</p>";
-
-    texto += "<hr>";
-    texto += "<p>Forma de pagamento: " + nomePagamento + "</p>";
-    texto += "<p>Total da Compra: R$ " + totalCompra + ",00</p>";
-    texto += "<p>Desconto: R$ " + desconto + ",00</p>";
-    texto += "<h3>Total Final: R$ " + totalAPagar + ",00</h3>";
-
-    let divResumo = document.getElementById('resumo');
-    divResumo.innerHTML = texto;
-    divResumo.style.display = "block";
+    const totalFinal = subtotal - desconto;
+    document.getElementById('modal-total').innerText = formatarMoeda(totalFinal);
 }
+
+// Tela de sucesso final
+function concluirCompra() {
+    const opcao = document.getElementById('forma-pagamento').value;
+    if (opcao === "0") {
+        alert("Por favor, selecione uma forma de pagamento para continuar."); // Alert simples de segurança
+        return;
+    }
+
+    // Zera o carrinho após o sucesso
+    carrinho = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    renderizarProdutos();
+    atualizarBadgeCarrinho();
+
+    abrirModal(`
+        <div class="modal-header">
+            <h2 class="text-success">Compra Realizada! 🎉</h2>
+            <button class="btn-close" onclick="fecharModal()">&times;</button>
+        </div>
+        <p>Obrigado por comprar na TechStore. O seu pedido está sendo processado e logo será enviado.</p>
+    `);
+}
+
+// Inicia a aplicação renderizando os produtos
+renderizarProdutos();

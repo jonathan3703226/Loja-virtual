@@ -2,51 +2,32 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Loja Simples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Eletrônicos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Loja de Eletrônicos</h1>
+    <header class="navbar">
+        <div class="container header-content">
+            <h1>TechStore</h1>
+            <button class="btn-cart" onclick="abrirCheckout()">
+                🛒 Carrinho <span id="cart-badge">0</span>
+            </button>
+        </div>
+    </header>
 
-    <div class="produto">
-        <p>Fone de Ouvido - R$ 250,00</p>
-        <button onclick="diminuir('qtd1')">-</button>
-        <span id="qtd1">0</span>
-        <button onclick="aumentar('qtd1')">+</button>
+    <main class="container">
+        <div class="produtos-grid" id="produtos-container">
+            </div>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content" id="modal-body">
+            </div>
     </div>
-
-    <div class="produto">
-        <p>Notebook - R$ 3500,00</p>
-        <button onclick="diminuir('qtd2')">-</button>
-        <span id="qtd2">0</span>
-        <button onclick="aumentar('qtd2')">+</button>
-    </div>
-
-    <div class="produto">
-        <p>Smart TV - R$ 2800,00</p>
-        <button onclick="diminuir('qtd3')">-</button>
-        <span id="qtd3">0</span>
-        <button onclick="aumentar('qtd3')">+</button>
-    </div>
-
-    <div class="produto">
-        <p>Caixa de Som - R$ 650,00</p>
-        <button onclick="diminuir('qtd4')">-</button>
-        <span id="qtd4">0</span>
-        <button onclick="aumentar('qtd4')">+</button>
-    </div>
-
-    <div class="produto">
-        <p>Videogame - R$ 2500,00</p>
-        <button onclick="diminuir('qtd5')">-</button>
-        <span id="qtd5">0</span>
-        <button onclick="aumentar('qtd5')">+</button>
-    </div>
-
-    <br>
-    <button class="botao-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
-
-    <div id="resumo"></div>
 
     <script src="script.js"></script>
 </body>

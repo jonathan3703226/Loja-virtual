@@ -3,34 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - A Maior Loja de Eletrônicos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>TechStore - Produtos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="navbar">
         <div class="container header-content">
-            <h1 class="logo">TechStore ⚡</h1>
-            <button class="btn-cart-nav" onclick="abrirCarrinho()">
+            <h1>TechStore</h1>
+            <!-- Redireciona para a página do carrinho -->
+            <a href="carrinho.html" class="btn-cart">
                 🛒 Carrinho <span id="cart-badge">0</span>
-            </button>
+            </a>
         </div>
     </header>
 
     <main class="container">
-        <!-- Grid Onde os Produtos Vão Aparecer -->
-        <div class="produtos-grid" id="produtos-container"></div>
+        <div class="lista-produtos" id="produtos-lista">
+            <!-- JS injeta os produtos aqui em formato de lista (um sobre o outro) -->
+        </div>
     </main>
 
-    <!-- Modal do Carrinho e Checkout -->
-    <div id="modal-overlay" class="modal-overlay">
-        <div class="modal-content" id="modal-body">
-            <!-- O conteúdo (Carrinho ou Pagamento) será injetado aqui -->
-        </div>
-    </div>
-
-    <!-- Toast de Notificação (Aviso verde quando adiciona item) -->
-    <div id="toast" class="toast">Produto adicionado ao carrinho!</div>
+    <div id="toast" class="toast">Adicionado ao carrinho!</div>
 
     <script src="script.js"></script>
 </body>

@@ -1,206 +1,363 @@
-// =========================================================
-// 1. DADOS EXATOS DO EXERCÍCIO (Com imagens reais do Unsplash)
-// =========================================================
-const dbProdutos = [
-    { id: 1, nome: "Fone de Ouvido", preco: 250.00, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
-    { id: 2, nome: "Notebook", preco: 3500.00, img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80" },
-    { id: 3, nome: "Smart TV", preco: 2800.00, img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" },
-    { id: 4, nome: "Caixa de Som", preco: 650.00, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80" },
-    { id: 5, nome: "Videogame", preco: 2500.00, img: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&q=80" }
-];
+class TechStore {
+    constructor() {
+        this.products = [];
+        this.inputQtys = {};
 
-// =========================================================
-// 2. ESTADO REATIVO COM PROXY
-// =========================================================
-// Inicia o carrinho com quantidade 0 para todos os produtos
-const estadoInicialCarrinho = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        const savedCart = localStorage.getItem('nextech_cart');
+        this.cart = savedCart ? JSON.parse(savedCart) : {};
 
-const state = new Proxy({
-    cart: { ...estadoInicialCarrinho }
-}, {
-    set(target, property, value) {
-        target[property] = value;
-        if (property === 'cart') {
-            renderProdutos(); // Atualiza a tela quando a quantidade muda
-        }
-        return true;
+        this.init();
     }
-});
 
-// =========================================================
-// 3. UTILITÁRIOS
-// =========================================================
-const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    async init() {
+        try {
+            const response = await fetch('produtos.json');
+            this.products = await response.json();
 
-// =========================================================
-// 4. RENDERIZAÇÃO DA VITRINE (Componentes)
-// =========================================================
-const renderProdutos = () => {
-    const app = document.getElementById('app');
-    
-    let html = `<div class="grid-produtos">`;
-    
-    dbProdutos.forEach(p => {
-        const qtd = state.cart[p.id];
-        html += `
-            <div class="produto-card">
-                <img src="${p.img}" alt="${p.nome}" class="produto-img">
-                <div class="produto-info">
-                    <h2>${p.nome}</h2>
-                    <p class="produto-preco">${formatarMoeda(p.preco)}</p>
+            this.products.forEach(p => this.inputQtys[p.id] = 1);
+            this.renderProducts();
+            this.updateCartDropdown();
+            this.setupGlobalEventListeners();
+        } catch (error) {
+            console.error("Erro ao carregar os produtos:", error);
+            document.getElementById('product-list').innerHTML = '<p>Erro ao carregar os produtos. Verifique se você está rodando um servidor local.</p>';
+        }
+    }
+
+    saveCart() {
+        localStorage.setItem('nextech_cart', JSON.stringify(this.cart));
+    }
+
+    formatBRL(value) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    }
+
+    setupGlobalEventListeners() {
+        document.getElementById('cart-toggle-btn').addEventListener('click', () => this.toggleCart());
+        document.getElementById('btn-checkout').addEventListener('click', () => this.processCheckout());
+
+        document.addEventListener('click', (e) => {
+            const cartContainer = document.getElementById('cart-container');
+            const cartDropdown = document.getElementById('cart-dropdown');
+            // e.composedPath() verifica a origem do clique mesmo se o elemento foi removido do HTML (evita fechar o carrinho ao renderizar)
+            if (!e.composedPath().includes(cartContainer)) {
+                cartDropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-overlay') this.closeModal();
+        });
+
+        // Delegação de Eventos: Lista de Produtos
+        document.getElementById('product-list').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const id = parseInt(btn.dataset.id);
+
+            if (action === 'scroll-up') this.scrollCarousel(id, -1);
+            if (action === 'scroll-down') this.scrollCarousel(id, 1);
+            if (action === 'qty-dec') this.updateInputQty(id, -1);
+            if (action === 'qty-inc') this.updateInputQty(id, 1);
+            if (action === 'add-cart') this.addToCart(id);
+            if (action === 'set-media') {
+                const index = parseInt(btn.dataset.index);
+                this.setMainMedia(id, index, btn);
+            }
+        });
+
+        // Delegação de Eventos: Ações dentro do Carrinho (+, -)
+        document.getElementById('cart-dropdown').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const id = parseInt(btn.dataset.id);
+
+            if (action === 'cart-qty-dec') this.updateCartItemQty(id, -1);
+            if (action === 'cart-qty-inc') this.updateCartItemQty(id, 1);
+        });
+    }
+
+    renderProducts() {
+        const listElement = document.getElementById('product-list');
+        listElement.innerHTML = '';
+
+        this.products.forEach(product => {
+            const card = document.createElement('article');
+            card.className = 'product-card';
+
+            const thumbsHTML = product.media.map((item, index) => {
+                const isVideo = item.type === 'video';
+                const imgSrc = isVideo ? item.thumb : item.src;
+                return `
+                    <div class="${isVideo ? 'thumb-video-icon' : ''}">
+                        <img src="${imgSrc}" class="thumb ${index === 0 ? 'active' : ''}" 
+                             alt="Miniatura ${index + 1} de ${product.name}"
+                             data-action="set-media" data-id="${product.id}" data-index="${index}" tabindex="0">
+                    </div>
+                `;
+            }).join('');
+
+            const firstMedia = product.media[0];
+            const mainMediaHTML = `
+                <div class="video-badge" aria-hidden="true">▶ Passar o mouse para ver</div>
+                <video src="${firstMedia.src}" muted loop id="media-${product.id}" aria-label="Vídeo demonstrativo"></video>
+            `;
+
+            card.innerHTML = `
+                <div class="product-gallery">
+                    <div class="carousel-wrapper-vertical">
+                        <button class="carousel-btn up" data-action="scroll-up" data-id="${product.id}" aria-label="Rolar imagens para cima">&#9650;</button>
+                        <div class="thumbnails-track-vertical" id="track-${product.id}">
+                            ${thumbsHTML}
+                        </div>
+                        <button class="carousel-btn down" data-action="scroll-down" data-id="${product.id}" aria-label="Rolar imagens para baixo">&#9660;</button>
+                    </div>
                     
-                    <div class="controle-qtd">
-                        <button class="btn-qtd" data-action="mudar-qtd" data-id="${p.id}" data-delta="-1">-</button>
-                        <span class="qtd-display">${qtd}</span>
-                        <button class="btn-qtd" data-action="mudar-qtd" data-id="${p.id}" data-delta="1">+</button>
+                    <div class="main-media-container" id="container-${product.id}">
+                        ${mainMediaHTML}
                     </div>
                 </div>
-            </div>
-        `;
-    });
 
-    html += `</div>
-             <div class="area-finalizar">
-                <button class="btn-finalizar" data-action="finalizar">Finalizar Compra</button>
-             </div>`;
-             
-    app.innerHTML = html;
-};
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-desc">${product.description}</p>
+                    
+                    <div class="product-price-box">
+                        <div class="product-price">${this.formatBRL(product.price)}</div>
+                    </div>
+                    
+                    <div class="shopee-qty-row">
+                        <span class="lbl" id="lbl-qty-${product.id}">Quantidade</span>
+                        <div class="qty-controls">
+                            <button class="btn-qty" data-action="qty-dec" data-id="${product.id}" aria-label="Diminuir quantidade de ${product.name}">-</button>
+                            <input type="text" class="qty-display" id="input-qty-${product.id}" value="${this.inputQtys[product.id]}" aria-labelledby="lbl-qty-${product.id}" readonly>
+                            <button class="btn-qty" data-action="qty-inc" data-id="${product.id}" aria-label="Aumentar quantidade de ${product.name}">+</button>
+                        </div>
+                    </div>
 
-// =========================================================
-// 5. LÓGICA DE NEGÓCIO (Regras do Professor)
-// =========================================================
-const processarCompra = () => {
-    // 1. Verificar se pelo menos um produto foi selecionado
-    const totalItens = Object.values(state.cart).reduce((acc, qtd) => acc + qtd, 0);
-    
-    if (totalItens === 0) {
-        alert("Nenhum produto foi selecionado.");
-        return;
+                    <div class="shopee-action-buttons">
+                        <button class="btn-add-cart-shopee" data-action="add-cart" data-id="${product.id}" aria-label="Adicionar ${product.name} ao Carrinho">
+                            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            `;
+            listElement.appendChild(card);
+
+            const container = card.querySelector(`#container-${product.id}`);
+            container.addEventListener('mouseenter', () => this.handleMediaHover(product.id, true));
+            container.addEventListener('mouseleave', () => this.handleMediaHover(product.id, false));
+            container.addEventListener('mousemove', (e) => this.zoomImage(e, container, product.id));
+        });
     }
 
-    // 2. Solicitar e validar a forma de pagamento
-    let formaPagamento = "";
-    let opcaoValida = false;
-    const opcoesNomes = { '1': 'À vista', '2': 'Cartão de débito', '3': 'Cartão de crédito' };
+    setMainMedia(productId, mediaIndex, thumbElement) {
+        const product = this.products.find(p => p.id === productId);
+        const media = product.media[mediaIndex];
+        const container = document.getElementById(`container-${productId}`);
 
-    while (!opcaoValida) {
-        formaPagamento = prompt("Informe a forma de pagamento:\n1 – À vista\n2 – Cartão de débito\n3 – Cartão de crédito");
-        
-        if (formaPagamento === null) return; // Se o usuário cancelar o prompt
-        
-        if (['1', '2', '3'].includes(formaPagamento)) {
-            opcaoValida = true;
+        if (media.type === 'video') {
+            container.innerHTML = `<div class="video-badge" aria-hidden="true">▶ Passar o mouse para ver</div><video src="${media.src}" muted loop id="media-${productId}"></video>`;
         } else {
-            alert("Opção inválida! Por favor, digite 1, 2 ou 3.");
+            container.innerHTML = `<img src="${media.src}" id="media-${productId}" alt="${product.name} em foco">`;
+        }
+
+        const track = document.getElementById(`track-${productId}`);
+        track.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+        thumbElement.classList.add('active');
+    }
+
+    handleMediaHover(productId, isHover) {
+        const mediaElement = document.getElementById(`media-${productId}`);
+        if (mediaElement && mediaElement.tagName === 'VIDEO') {
+            isHover ? mediaElement.play() : mediaElement.pause();
+        } else if (!isHover && mediaElement && mediaElement.tagName === 'IMG') {
+            mediaElement.style.transformOrigin = `center center`;
+            mediaElement.style.transform = 'scale(1)';
         }
     }
 
-    // 3. Calcular valores
-    let valorTotal = 0;
-    const produtosComprados = [];
-
-    dbProdutos.forEach(p => {
-        const qtd = state.cart[p.id];
-        if (qtd > 0) {
-            const subtotal = p.preco * qtd;
-            valorTotal += subtotal;
-            produtosComprados.push({
-                nome: p.nome,
-                qtd: qtd,
-                precoUnidade: p.preco,
-                subtotal: subtotal
-            });
+    zoomImage(e, container, productId) {
+        const mediaElement = document.getElementById(`media-${productId}`);
+        if (mediaElement && mediaElement.tagName === 'IMG') {
+            const { left, top, width, height } = container.getBoundingClientRect();
+            const x = ((e.clientX - left) / width) * 100;
+            const y = ((e.clientY - top) / height) * 100;
+            mediaElement.style.transformOrigin = `${x}% ${y}%`;
+            mediaElement.style.transform = 'scale(2.5)';
         }
-    });
-
-    // 4. Aplicar Regra Promocional (>= 5000 E pagamento à vista (1))
-    let valorDesconto = 0;
-    if (valorTotal >= 5000 && formaPagamento === '1') {
-        valorDesconto = valorTotal * 0.10; // 10% de desconto
     }
 
-    const totalAPagar = valorTotal - valorDesconto;
+    scrollCarousel(productId, direction) {
+        const track = document.getElementById(`track-${productId}`);
+        track.scrollBy({ top: 100 * direction, behavior: 'smooth' });
+    }
 
-    // 5. Exibir o Resumo da Compra
-    renderResumo(produtosComprados, opcoesNomes[formaPagamento], valorTotal, valorDesconto, totalAPagar);
-};
+    updateInputQty(productId, change) {
+        const currentQty = this.inputQtys[productId];
+        if (currentQty + change >= 1) {
+            this.inputQtys[productId] = currentQty + change;
+            document.getElementById(`input-qty-${productId}`).value = this.inputQtys[productId];
+        }
+    }
 
-// =========================================================
-// 6. RENDERIZAÇÃO DO RESUMO
-// =========================================================
-const renderResumo = (produtos, pagamento, total, desconto, totalFinal) => {
-    const app = document.getElementById('app');
-    
-    let html = `
-        <div class="resumo-container">
-            <h2>🧾 Resumo da Compra</h2>
-            <table class="tabela-resumo">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Qtd</th>
-                        <th>Preço Unit.</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
+    addToCart(productId) {
+        const qtyToAdd = this.inputQtys[productId];
+        this.cart[productId] = (this.cart[productId] || 0) + qtyToAdd;
 
-    produtos.forEach(p => {
-        html += `
-            <tr>
-                <td>${p.nome}</td>
-                <td>${p.qtd}</td>
-                <td>${formatarMoeda(p.precoUnidade)}</td>
-                <td>${formatarMoeda(p.subtotal)}</td>
-            </tr>
-        `;
-    });
+        this.inputQtys[productId] = 1;
+        document.getElementById(`input-qty-${productId}`).value = 1;
 
-    html += `
-                </tbody>
+        this.saveCart();
+        this.updateCartDropdown();
+
+        const p = this.products.find(p => p.id === productId);
+        this.showToast(`✅ ${p.name} adicionado ao carrinho!`);
+    }
+
+    updateCartItemQty(productId, change) {
+        if (this.cart[productId]) {
+            const newQty = this.cart[productId] + change;
+            if (newQty > 0) {
+                this.cart[productId] = newQty;
+            } else {
+                // Se a quantidade chegar a 0, exclui automaticamente o item
+                delete this.cart[productId];
+                this.showToast(`🗑️ Item removido do carrinho`);
+            }
+            this.saveCart();
+            this.updateCartDropdown();
+        }
+    }
+
+    toggleCart() {
+        const cartDropdown = document.getElementById('cart-dropdown');
+        cartDropdown.classList.toggle('hidden');
+    }
+
+    updateCartDropdown() {
+        const cartList = document.getElementById('cart-items-list');
+        const checkoutArea = document.getElementById('cart-checkout-area');
+        const badge = document.getElementById('cart-badge');
+
+        let totalItems = 0;
+        let totalPrice = 0;
+        cartList.innerHTML = '';
+
+        if (Object.keys(this.cart).length === 0) {
+            cartList.innerHTML = '<div class="empty-cart-msg">Seu carrinho de compras está vazio</div>';
+            checkoutArea.style.display = 'none';
+            badge.textContent = 0;
+            return;
+        }
+
+        checkoutArea.style.display = 'block';
+
+        for (const [id, qty] of Object.entries(this.cart)) {
+            const p = this.products.find(p => p.id === parseInt(id));
+            if (!p) continue;
+
+            const subtotal = p.price * qty;
+            totalItems += qty;
+            totalPrice += subtotal;
+
+            const imgSrc = p.media.find(m => m.type === 'image') ? p.media.find(m => m.type === 'image').src : p.media[0].thumb;
+
+            cartList.innerHTML += `
+                <div class="cart-item">
+                    <img src="${imgSrc}" alt="Produto ${p.name}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${p.name}</div>
+                        <div class="cart-item-actions">
+                            <div class="qty-controls cart-qty-controls">
+                                <button class="btn-qty" data-action="cart-qty-dec" data-id="${p.id}" aria-label="Diminuir quantidade">-</button>
+                                <input type="text" class="qty-display" value="${qty}" readonly>
+                                <button class="btn-qty" data-action="cart-qty-inc" data-id="${p.id}" aria-label="Aumentar quantidade">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">${this.formatBRL(subtotal)}</div>
+                </div>
+            `;
+        }
+
+        badge.textContent = totalItems;
+        document.getElementById('dropdown-total').textContent = this.formatBRL(totalPrice);
+    }
+
+    processCheckout() {
+        const selectElement = document.getElementById('payment-method-select');
+        const paymentCode = parseInt(selectElement.value);
+
+        if (isNaN(paymentCode)) {
+            alert("Por favor, selecione uma forma de pagamento no carrinho.");
+            return;
+        }
+
+        const paymentName = selectElement.options[selectElement.selectedIndex].text.split(' - ')[1].split(' (')[0];
+        let totalCompra = 0;
+        let receiptRows = '';
+
+        for (const [id, qty] of Object.entries(this.cart)) {
+            const p = this.products.find(p => p.id === parseInt(id));
+            const subtotal = p.price * qty;
+            totalCompra += subtotal;
+            receiptRows += `
+                <tr>
+                    <td><strong>${qty}x</strong> ${p.name.split(',')[0]}</td>
+                    <td>${this.formatBRL(p.price)}</td>
+                    <td>${this.formatBRL(subtotal)}</td>
+                </tr>
+            `;
+        }
+
+        let desconto = (totalCompra >= 5000 && paymentCode === 1) ? (totalCompra * 0.10) : 0;
+        const totalPagar = totalCompra - desconto;
+
+        const summaryHTML = `
+            <h2 id="modal-title" style="margin-bottom: 20px; font-weight: 500;">Obrigado pela sua compra!</h2>
+            <table class="receipt-table">
+                <thead><tr><th>Produto</th><th>Preço Un.</th><th>Subtotal</th></tr></thead>
+                <tbody>${receiptRows}</tbody>
             </table>
             
-            <div class="totais-box">
-                <p><strong>Forma de Pagamento:</strong> ${pagamento}</p>
-                <p><strong>Total da Compra:</strong> ${formatarMoeda(total)}</p>
-                <p class="desconto"><strong>Desconto aplicado:</strong> - ${formatarMoeda(desconto)}</p>
-                <h3 class="total-final">Total a Pagar: ${formatarMoeda(totalFinal)}</h3>
+            <div style="background: #fafafa; padding: 20px; border: 1px solid var(--border);">
+                <div class="summary-row"><span>Forma de Pagamento:</span><strong>${paymentName}</strong></div>
+                <div class="summary-row"><span>Total dos Produtos:</span><span>${this.formatBRL(totalCompra)}</span></div>
+                ${desconto > 0 ? `<div class="summary-row" style="color: #00bfa5; font-weight:600;"><span>Desconto (10%):</span><span>- ${this.formatBRL(desconto)}</span></div>` : ''}
+                
+                <div class="summary-row" style="font-size: 24px; font-weight: 700; color: var(--primary); margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">      <span>Total Pago:</span><span>${this.formatBRL(totalPagar)}</span>
+                </div>
             </div>
-            
-            <button class="btn-voltar" onclick="location.reload()">Fazer nova compra</button>
-        </div>
-    `;
+            <button class="btn-checkout-final" id="btn-finish-modal" style="width: 100%; margin-top: 20px;">Finalizar e Limpar Carrinho</button>
+        `;
 
-    app.innerHTML = html;
-};
+        document.getElementById('modal-content').innerHTML = summaryHTML;
+        document.getElementById('modal-overlay').classList.remove('hidden');
+        this.toggleCart();
 
-// =========================================================
-// 7. DELEGAÇÃO DE EVENTOS (Cliques)
-// =========================================================
-document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-
-    const action = btn.dataset.action;
-
-    if (action === 'mudar-qtd') {
-        const id = btn.dataset.id;
-        const delta = parseInt(btn.dataset.delta);
-        const currentQtd = state.cart[id];
-        const novaQtd = currentQtd + delta;
-
-        // O sistema não deverá permitir que a quantidade fique negativa
-        if (novaQtd >= 0) {
-            state.cart = { ...state.cart, [id]: novaQtd };
-        }
+        document.getElementById('btn-finish-modal').addEventListener('click', () => {
+            this.cart = {};
+            this.saveCart();
+            location.reload();
+        });
     }
 
-    if (action === 'finalizar') {
-        processarCompra();
+    closeModal() {
+        document.getElementById('modal-overlay').classList.add('hidden');
     }
-});
 
-// Inicializa a aplicação
-renderProdutos();
+    showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+}
+
+const store = new TechStore();

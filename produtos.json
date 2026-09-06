@@ -1,0 +1,53 @@
+[
+    { 
+        "id": 1, "name": "Fone de Ouvido Bluetooth JBL Tune 510BT", 
+        "description": "Desfrute de graves potentes com a tecnologia JBL Pure Bass. Leve, confortável, dobrável e bateria para até 40 horas.", "price": 250.00, 
+        "media": [
+            { "type": "video", "src": "https://media.w3.org/2010/05/sintel/trailer.mp4", "thumb": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80" }
+        ]
+    },
+    { 
+        "id": 2, "name": "Notebook Gamer Acer Nitro 5, Intel Core i5", 
+        "description": "Domine os jogos com o processador Intel Core. Possui SSD de 512GB, tela de 15.6\" Full HD 144Hz e teclado retroiluminado.", "price": 3500.00, 
+        "media": [
+            { "type": "video", "src": "https://media.w3.org/2010/05/sintel/trailer.mp4", "thumb": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=200&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&q=80" }
+        ]
+    },
+    { 
+        "id": 3, "name": "Smart TV 55\" 4K UHD Samsung CU8000", 
+        "description": "Cores vibrantes e contraste impecável. Experiência de cinema em casa com design Air Slim elegante, bordas infinitas e Alexa.", "price": 2800.00, 
+        "media": [
+            { "type": "video", "src": "https://media.w3.org/2010/05/sintel/trailer.mp4", "thumb": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=200&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1601944177325-f8867652837f?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80" }
+        ]
+    },
+    { 
+        "id": 4, "name": "Caixa de Som Bluetooth JBL Charge 5", 
+        "description": "Leve a festa com você. Som poderoso e graves profundos com até 20h de reprodução. À prova d'água e com função powerbank.", "price": 650.00, 
+        "media": [
+            { "type": "video", "src": "https://media.w3.org/2010/05/sintel/trailer.mp4", "thumb": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1589003071536-46700689b027?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1612222869049-d8ec83637a3c?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80" }
+        ]
+    },
+    { 
+        "id": 5, "name": "Console PlayStation 5 (PS5) Edição Física", 
+        "description": "Velocidade na luz com um SSD ultrarrápido. Imersão de tirar o fôlego com feedback tátil, gatilhos adaptáveis e áudio 3D.", "price": 2500.00, 
+        "media": [
+            { "type": "video", "src": "https://media.w3.org/2010/05/sintel/trailer.mp4", "thumb": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=200&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1606144042861-12f36d654fbd?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=800&q=80" },
+            { "type": "image", "src": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&q=80" }
+        ]
+    }
+]

@@ -1,23 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - E-commerce</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>NexTech | A sua loja do futuro</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <header class="navbar">
+    <header class="header">
         <div class="container header-content">
-            <h1>TechStore</h1>
+            <div class="logo-area">
+                <div class="logo" aria-label="Início NexTech" tabindex="0">
+                    <svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>NexTech</span>
+                </div>
+            </div>
+
+            <div class="cart-container" id="cart-container">
+                <div class="cart-icon-wrapper" id="cart-toggle-btn" aria-label="Abrir carrinho de compras" role="button"
+                    tabindex="0">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cart-badge" aria-live="polite">0</span>
+                </div>
+
+                <div class="cart-dropdown hidden" id="cart-dropdown">
+                    <div class="cart-dropdown-header">Produtos Adicionados Recentemente</div>
+                    <div class="cart-items-list" id="cart-items-list">
+                        <!-- Renderizado via JS -->
+                    </div>
+
+                    <div class="cart-checkout-area" id="cart-checkout-area" style="display: none;">
+                        <label for="payment-method-select" class="sr-only" style="display: none;">Forma de
+                            Pagamento</label>
+                        <select id="payment-method-select" class="custom-select"
+                            aria-label="Selecione a forma de pagamento">
+                            <option value="" disabled selected>-- Forma de Pagamento --</option>
+                            <option value="1">1 - À vista (10% OFF em compras > R$5.000)</option>
+                            <option value="2">2 - Cartão de Débito</option>
+                            <option value="3">3 - Cartão de Crédito</option>
+                        </select>
+                        <div class="cart-dropdown-footer">
+                            <span class="cart-total-text" id="dropdown-total" aria-live="polite">R$ 0,00</span>
+                            <button class="btn-checkout-final" id="btn-checkout"
+                                aria-label="Finalizar Compra do Carrinho">Finalizar Compra</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container" id="app">
-        <!-- O JS vai injetar os produtos e o resumo aqui -->
+    <main class="container">
+        <section id="product-list" class="product-list" aria-label="Lista de Produtos"></section>
     </main>
+
+    <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal" id="modal-content"></div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

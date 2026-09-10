@@ -1,8 +1,9 @@
 # NexTech E-commerce Cart (Vanilla JS/HTML/CSS)
 
-![HTML5](https://img.shields.io/badge/HTML5-W3C_VALIDADO-brightgreen?style=for-the-badge&logo=html5)
-![CSS3](https://img.shields.io/badge/CSS3-W3C_VALIDADO-brightgreen?style=for-the-badge&logo=css3)
-![JAVASCRIPT](https://img.shields.io/badge/JAVASCRIPT-ZERO_DEPENDENCIES-brightgreen?style=for-the-badge&logo=javascript)
+![HTML5](https://img.shields.io/badge/HTML5-SEMÂNTICO-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-RESPONSIVO-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JAVASCRIPT-VANILLA_ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![LocalStorage](https://img.shields.io/badge/ESTADO-LOCAL__STORAGE-brightgreen?style=for-the-badge)
 
 E-commerce responsivo desenvolvido para simular a experiência de uma loja de tecnologia. O foco arquitetural do projeto foi a construção de um carrinho de compras funcional, consumo de dados assíncrono e manipulação dinâmica do DOM utilizando exclusivamente JavaScript puro (Vanilla JS), sem frameworks.
 

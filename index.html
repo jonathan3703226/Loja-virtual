@@ -2,52 +2,387 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Loja Simples</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Compras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS para formatação e organização visual */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 260px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .btn-ctrl {
+            background: #3498db;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-ctrl:hover {
+            background: #2980b9;
+        }
+
+        .qty-display {
+            font-size: 1.2rem;
+            font-weight: 600;
+            width: 40px;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            margin: 40px auto;
+            padding: 15px;
+            font-size: 1.2rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .checkout-btn:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+        }
+
+        .summary-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: none; /* Escondido por padrão */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .summary-container h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .total-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 1.1rem;
+        }
+
+        .total-section p {
+            margin-bottom: 8px;
+        }
+
+        .total-final {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Loja de Eletrônicos</h1>
 
-    <div class="produto">
-        <p>Fone de Ouvido - R$ 250,00</p>
-        <button onclick="diminuir('qtd1')">-</button>
-        <span id="qtd1">0</span>
-        <button onclick="aumentar('qtd1')">+</button>
+    <header>
+        <h1>⚡ TechStore</h1>
+        <p>A sua loja de eletrônicos</p>
+    </header>
+
+    <div class="container">
+        <!-- Grid de Produtos -->
+        <div class="product-grid" id="product-grid">
+            <!-- Os produtos serão renderizados aqui via JavaScript -->
+        </div>
+
+        <!-- Botão de Finalizar -->
+        <button class="checkout-btn" onclick="finalizarCompra()">🛒 Finalizar Compra</button>
+
+        <!-- Resumo da Compra -->
+        <div class="summary-container" id="summary-container">
+            <!-- O cupom fiscal será gerado aqui -->
+        </div>
     </div>
 
-    <div class="produto">
-        <p>Notebook - R$ 3500,00</p>
-        <button onclick="diminuir('qtd2')">-</button>
-        <span id="qtd2">0</span>
-        <button onclick="aumentar('qtd2')">+</button>
-    </div>
+    <script>
+        // Lógica da aplicação em JavaScript
 
-    <div class="produto">
-        <p>Smart TV - R$ 2800,00</p>
-        <button onclick="diminuir('qtd3')">-</button>
-        <span id="qtd3">0</span>
-        <button onclick="aumentar('qtd3')">+</button>
-    </div>
+        // 1. Definição dos produtos disponíveis com imagens da web
+        const produtos = [
+            { id: 1, nome: 'Fone de Ouvido', preco: 250.00, qty: 0, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80' },
+            { id: 2, nome: 'Notebook', preco: 3500.00, qty: 0, img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80' },
+            { id: 3, nome: 'Smart TV', preco: 2800.00, qty: 0, img: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=500&q=80' },
+            { id: 4, nome: 'Caixa de Som', preco: 650.00, qty: 0, img: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80' },
+            { id: 5, nome: 'Videogame', preco: 2500.00, qty: 0, img: 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?auto=format&fit=crop&w=500&q=80' }
+        ];
 
-    <div class="produto">
-        <p>Caixa de Som - R$ 650,00</p>
-        <button onclick="diminuir('qtd4')">-</button>
-        <span id="qtd4">0</span>
-        <button onclick="aumentar('qtd4')">+</button>
-    </div>
+        // Função para formatar valores em Reais (R$)
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-    <div class="produto">
-        <p>Videogame - R$ 2500,00</p>
-        <button onclick="diminuir('qtd5')">-</button>
-        <span id="qtd5">0</span>
-        <button onclick="aumentar('qtd5')">+</button>
-    </div>
+        // Função para renderizar os produtos na tela
+        function renderizarProdutos() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
 
-    <br>
-    <button class="botao-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+            produtos.forEach(produto => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${produto.img}" alt="${produto.nome}" class="product-img">
+                    <h3 class="product-title">${produto.nome}</h3>
+                    <p class="product-price">${formatarMoeda(produto.preco)}</p>
+                    <div class="controls">
+                        <button class="btn-ctrl" onclick="alterarQuantidade(${produto.id}, -1)">-</button>
+                        <span class="qty-display" id="qty-${produto.id}">${produto.qty}</span>
+                        <button class="btn-ctrl" onclick="alterarQuantidade(${produto.id}, 1)">+</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
-    <div id="resumo"></div>
+        // Função para aumentar (+) ou diminuir (-) a quantidade
+        function alterarQuantidade(id, delta) {
+            const produto = produtos.find(p => p.id === id);
+            if (produto) {
+                let novaQuantidade = produto.qty + delta;
+                
+                // Regra: Não permitir que a quantidade fique negativa
+                if (novaQuantidade >= 0) {
+                    produto.qty = novaQuantidade;
+                    document.getElementById(`qty-${id}`).innerText = produto.qty;
+                }
+            }
+        }
 
-    <script src="script.js"></script>
+        // Função principal: Finalizar a Compra
+        function finalizarCompra() {
+            // Filtrar apenas os produtos com quantidade maior que zero
+            const selecionados = produtos.filter(p => p.qty > 0);
+
+            // Regra: Verificar se pelo menos um produto foi selecionado
+            if (selecionados.length === 0) {
+                alert("Nenhum produto foi selecionado.");
+                return;
+            }
+
+            // Solicitar a forma de pagamento e validar
+            let opcaoPagamento;
+            let pagamentoTexto = "";
+
+            while (true) {
+                opcaoPagamento = prompt(
+                    "Selecione a forma de pagamento (Digite 1, 2 ou 3):\n\n" +
+                    "1 – À vista\n" +
+                    "2 – Cartão de débito\n" +
+                    "3 – Cartão de crédito"
+                );
+
+                if (opcaoPagamento === '1') {
+                    pagamentoTexto = "À vista";
+                    break;
+                } else if (opcaoPagamento === '2') {
+                    pagamentoTexto = "Cartão de débito";
+                    break;
+                } else if (opcaoPagamento === '3') {
+                    pagamentoTexto = "Cartão de crédito";
+                    break;
+                } else if (opcaoPagamento === null) {
+                    // Usuário clicou em cancelar no prompt
+                    return; 
+                } else {
+                    alert("Opção inválida! Por favor, digite 1, 2 ou 3.");
+                }
+            }
+
+            // Variáveis para cálculos
+            let totalCompra = 0;
+            
+            // Construção visual da tabela do resumo
+            let htmlResumo = `
+                <h2>Resumo da Compra</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Preço Unit.</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // Calcular subtotal e total
+            selecionados.forEach(p => {
+                const subtotal = p.preco * p.qty;
+                totalCompra += subtotal;
+                
+                htmlResumo += `
+                    <tr>
+                        <td>${p.nome}</td>
+                        <td>${p.qty}</td>
+                        <td>${formatarMoeda(p.preco)}</td>
+                        <td>${formatarMoeda(subtotal)}</td>
+                    </tr>
+                `;
+            });
+
+            htmlResumo += `</tbody></table>`;
+
+            // Regra Promocional: >= R$5000 e À vista (Opção 1) = 10% de desconto
+            let desconto = 0;
+            if (totalCompra >= 5000 && opcaoPagamento === '1') {
+                desconto = totalCompra * 0.10;
+            }
+
+            // Calcular o valor final
+            const totalFinal = totalCompra - desconto;
+
+            // Inserir os totais no HTML
+            htmlResumo += `
+                <div class="total-section">
+                    <p><strong>Forma de Pagamento:</strong> ${pagamentoTexto}</p>
+                    <p><strong>Total da Compra:</strong> ${formatarMoeda(totalCompra)}</p>
+                    <p style="color: #27ae60;"><strong>Desconto Aplicado:</strong> - ${formatarMoeda(desconto)}</p>
+                    <h3 class="total-final">Total a Pagar: ${formatarMoeda(totalFinal)}</h3>
+                </div>
+            `;
+
+            // Exibir o resumo na página
+            const divResumo = document.getElementById('summary-container');
+            divResumo.innerHTML = htmlResumo;
+            divResumo.style.display = 'block';
+
+            // Rolar a tela suavemente até o resumo
+            divResumo.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Inicializar a loja renderizando os produtos na primeira vez
+        renderizarProdutos();
+    </script>
 </body>
 </html>

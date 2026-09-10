@@ -18,6 +18,11 @@
         },
         "media": [
             {
+                "type": "video",
+                "src": "https://www.w3schools.com/html/mov_bbb.mp4",
+                "thumb": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80"
+            },
+            {
                 "type": "image",
                 "src": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80"
             },
@@ -28,6 +33,14 @@
             {
                 "type": "image",
                 "src": "https://images.unsplash.com/photo-1572569438062-cba201414156?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80"
             }
         ]
     }

@@ -128,3 +128,82 @@ body { background-color: var(--bg-color); color: var(--text-main); padding-top: 
     .carousel-wrapper-vertical { width: 100%; flex-direction: row; }
     .main-media-container { height: 350px; }
 }
+/* --- Novas Estilizações da Galeria e Cursor --- */
+
+/* Altura igual à da imagem principal (560px) para preencher a lateral */
+.carousel-wrapper-vertical { 
+    width: 85px; 
+    height: 560px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+/* flex: 1 faz com que a lista ocupe todo o espaço livre entre as setas */
+.thumbnails-track-vertical { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+    overflow-y: auto; 
+    flex: 1; 
+    max-height: none; /* Remove o limite antigo de 264px */
+    width: 100%; 
+    scroll-behavior: smooth; 
+}
+.thumbnails-track-vertical::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* flex-shrink: 0 impede que as setas sejam esmagadas se houver muitas fotos */
+.thumb-arrow { 
+    flex-shrink: 0;
+    background: transparent; 
+    border: none; 
+    font-size: 14px; 
+    cursor: pointer; 
+    color: var(--text-muted); 
+    padding: 6px; 
+    width: 100%; 
+    transition: all 0.2s; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+.thumb-arrow:hover { 
+    color: var(--primary); 
+    background: #F1F5F9; 
+    border-radius: 4px; 
+}
+/* Ocultar cursor padrão sobre o vídeo */
+.media-content video {
+    cursor: none;
+}
+
+/* Cursor Customizado do Vídeo (Cor Reversa e Opacidade) */
+.video-cursor {
+    position: fixed;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7); /* Opacidade reduzida */
+    mix-blend-mode: difference; /* Efeito de cor reversa */
+    pointer-events: none; /* Permite clicar através dele */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    opacity: 1;
+}
+.video-cursor.hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+}
+.video-cursor svg {
+    width: 28px;
+    height: 28px;
+    fill: #000;
+    margin-left: 5px; /* Compensa o peso visual do triângulo de play */
+}

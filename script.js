@@ -12,12 +12,34 @@ class TechStore {
             const response = await fetch('produtos.json');
             this.products = await response.json();
             this.products.forEach(p => this.inputQtys[p.id] = 1);
+            
+            // Inicia a criação do cursor customizado de vídeo
+            this.createCursor(); 
+            
             this.renderProducts();
             this.updateCartDropdown(); 
             this.setupGlobalEventListeners();
         } catch (error) {
             console.error("Erro ao carregar:", error);
             document.getElementById('product-list').innerHTML = '<p>Erro ao carregar produtos.</p>';
+        }
+    }
+
+    // Cria o cursor de vídeo customizado (efeito de cor reversa)
+    createCursor() {
+        let cursor = document.getElementById('video-cursor');
+        if (!cursor) {
+            cursor = document.createElement('div');
+            cursor.id = 'video-cursor';
+            cursor.className = 'video-cursor hidden';
+            // Ícone de Play em SVG
+            cursor.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            document.body.appendChild(cursor);
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
         }
     }
 
@@ -54,6 +76,10 @@ class TechStore {
             if (action === 'next-media') this.navigateMedia(id, 1);
             if (action === 'show-details') this.showModalInfo(id, 'details');
             if (action === 'show-specs') this.showModalInfo(id, 'specs');
+            
+            // Cliques das setinhas de rolagem da galeria de miniaturas
+            if (action === 'scroll-thumbs-up') this.scrollThumbs(id, -1);
+            if (action === 'scroll-thumbs-down') this.scrollThumbs(id, 1);
         });
 
         document.getElementById('cart-dropdown').addEventListener('click', (e) => {
@@ -64,6 +90,13 @@ class TechStore {
             if (action === 'cart-qty-dec') this.updateCartItemQty(id, -1);
             if (action === 'cart-qty-inc') this.updateCartItemQty(id, 1);
         });
+    }
+
+    // Move a barra de miniaturas para cima ou para baixo
+    scrollThumbs(productId, direction) {
+        const track = document.getElementById(`track-${productId}`);
+        const scrollAmount = 90; // Valor de rolagem aproximado de 1 miniatura
+        track.scrollBy({ top: direction * scrollAmount, behavior: 'smooth' });
     }
 
     renderProducts() {
@@ -94,9 +127,11 @@ class TechStore {
             card.innerHTML = `
                 <div class="product-gallery">
                     <div class="carousel-wrapper-vertical">
+                        <button class="thumb-arrow up" data-action="scroll-thumbs-up" data-id="${product.id}">▲</button>
                         <div class="thumbnails-track-vertical" id="track-${product.id}">
                             ${thumbsHTML}
                         </div>
+                        <button class="thumb-arrow down" data-action="scroll-thumbs-down" data-id="${product.id}">▼</button>
                     </div>
                     
                     <div class="main-media-container" id="container-${product.id}" data-current-index="0">
@@ -140,7 +175,6 @@ class TechStore {
             `;
             listElement.appendChild(card);
 
-            // Crosshair e autoplay de vídeos
             const mediaContent = card.querySelector(`#media-content-${product.id}`);
             mediaContent.addEventListener('mouseenter', () => this.handleMediaHover(product.id, true));
             mediaContent.addEventListener('mouseleave', () => this.handleMediaHover(product.id, false));
@@ -182,13 +216,25 @@ class TechStore {
         this.setMainMedia(productId, currentIndex);
     }
 
+    // Gerencia o hover da mídia principal (vídeo autoplay + cursor vs. imagem zoom)
     handleMediaHover(productId, isHover) {
         const mediaElement = document.getElementById(`media-${productId}`);
+        const cursor = document.getElementById('video-cursor');
+        
         if (mediaElement && mediaElement.tagName === 'VIDEO') {
-            isHover ? mediaElement.play() : mediaElement.pause();
-        } else if (!isHover && mediaElement && mediaElement.tagName === 'IMG') {
-            mediaElement.style.transformOrigin = `center center`;
-            mediaElement.style.transform = 'scale(1)';
+            if (isHover) {
+                mediaElement.play();
+                cursor.classList.remove('hidden');
+            } else {
+                mediaElement.pause();
+                cursor.classList.add('hidden');
+            }
+        } else {
+            cursor.classList.add('hidden'); // Oculta o cursor em imagens
+            if (!isHover && mediaElement && mediaElement.tagName === 'IMG') {
+                mediaElement.style.transformOrigin = `center center`;
+                mediaElement.style.transform = 'scale(1)';
+            }
         }
     }
 
@@ -362,6 +408,7 @@ class TechStore {
     }
 
     closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+    
     showToast(msg) {
         const toast = document.getElementById('toast');
         toast.textContent = msg; toast.classList.remove('hidden');

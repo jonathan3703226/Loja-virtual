@@ -1,0 +1,10 @@
+# Configurações do Editor
+.vscode/
+
+# Arquivos de sistema operacional (Mac/Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Módulos (caso adicione pacotes NPM no futuro)
+node_modules/

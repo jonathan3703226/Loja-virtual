@@ -76,8 +76,7 @@ class TechStore {
             if (action === 'next-media') this.navigateMedia(id, 1);
             if (action === 'show-details') this.showModalInfo(id, 'details');
             if (action === 'show-specs') this.showModalInfo(id, 'specs');
-            if (action === 'scroll-thumbs-up') this.scrollThumbs(id, -1);
-            if (action === 'scroll-thumbs-down') this.scrollThumbs(id, 1);
+            
         });
 
         document.getElementById('cart-dropdown').addEventListener('click', (e) => {
@@ -121,14 +120,12 @@ class TechStore {
                 ? `<video src="${firstMedia.src}" muted loop id="media-${product.id}"></video>`
                 : `<img src="${firstMedia.src}" id="media-${product.id}" alt="${product.name}">`;
 
-            card.innerHTML = `
+           card.innerHTML = `
                 <div class="product-gallery">
                     <div class="carousel-wrapper-vertical">
-                        <button class="thumb-arrow up" data-action="scroll-thumbs-up" data-id="${product.id}">▲</button>
                         <div class="thumbnails-track-vertical" id="track-${product.id}">
                             ${thumbsHTML}
                         </div>
-                        <button class="thumb-arrow down" data-action="scroll-thumbs-down" data-id="${product.id}">▼</button>
                     </div>
                     
                     <div class="main-media-container" id="container-${product.id}" data-current-index="0">

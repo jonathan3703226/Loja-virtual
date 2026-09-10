@@ -1,136 +1,222 @@
 [
     {
         "id": 1,
-        "name": "Fone De Ouvido Sem Fio JBL Wave Beam 2",
-        "description": "Equipado com Bluetooth 5.3, o Wave Beam 2 oferece conexão estável. Duração de bateria de até 40 horas e Cancelamento de Ruído (ANC) para imersão total.",
+        "name": "Fone De Ouvido Bluetooth Jbl Tune 720Bt - Preto",
+        "description": "O Fone de Ouvido Bluetooth JBL Tune 720BT é ideal para quem busca praticidade e desempenho, oferecendo qualidade de som superior com a assinatura sonora da JBL, graves potentes e bateria de longa duração para o dia a dia.",
         "price": 250.00,
-        "details": "Transforme sua experiência sonora com o Fone de Ouvido Sem Fio Wave Beam 2 JBL. Combina o melhor da tecnologia sem fio com o design icônico da JBL, proporcionando liberdade total de movimento. Conta com 4 microfones para chamadas nítidas, resistência à água e poeira (IP54) e pareamento incrivelmente rápido graças ao Google Fast Pair e Microsoft Swift Pair.",
+        "details": "O Fone de Ouvido Bluetooth JBL Tune 720BT é um dispositivo de áudio sem fio que oferece qualidade de som superior com a assinatura sonora da JBL. Ideal para quem busca praticidade e desempenho, ele combina design elegante e funcionalidade avançada.<br><br>Qualidade de Som JBL Pure Bass: Oferece graves profundos e potentes, garantindo uma experiência de áudio envolvente.<br>Conexão Bluetooth: Permite a liberdade de movimento sem fios, com conexão estável e rápida a dispositivos compatíveis.<br>Bateria de Longa Duração: Até 76 horas de reprodução contínua com uma única carga, tornando-o perfeito para uso prolongado.<br><br>Fones JBL Tune 720BT são ideais para quem procura um equilíbrio entre qualidade de som, conforto e funcionalidade em um design moderno e portátil.<br><br>Características:<br>Áudio: Frequência 20 Hz – 20 kHz. Impedância 32 Ohms. Sensibilidade 101 dB SPL. Alto falantes 40 mm.<br>Microfone: Sensibilidade -40 dBV a 1 kHz/Pa.<br>Conectividade: Bluetooth Sim 5.3.<br>Bateria: Tempo de carregamento 2 horas. Capacidade de reprodução Até 76 horas. Indicador de nível Sim.<br><br>Especificações Técnicas:<br>Marca: JBL.<br>Modelo: Tune 720BT.<br>Dimensões do Produto (LxAxP): 18,4cm x 22cm x 7,5cm. Peso: 445g.<br>Conteúdo da Embalagem: 01 fone de ouvido JBL Tune 720BT, 01 cabo para recarga USB-C, 01 cabo de áudio removível.<br>Garantia do Fornecedor: 01 Ano (contra defeito de fabricação).",
         "specs": {
+            "SKU": "404216-1",
+            "Código de barras": "6925281967061",
             "Marca": "JBL",
-            "Modelo": "Wave Beam 2",
-            "Conexão": "Bluetooth 5.3",
-            "Bateria": "Até 40 horas (10h no fone + 30h no estojo)",
-            "Tempo de Recarga": "2 horas (Carga rápida: 10 min = 3h de uso)",
-            "Cancelamento de Ruído": "Sim (ANC com Smart Ambient)",
-            "Resistência": "IP54 (Fones) / IPX2 (Estojo)",
-            "Microfones": "4 microfones integrados",
-            "Formato": "TWS (True Wireless Stereo)"
+            "Bluetooth": "Sim",
+            "Garantia de fábrica": "12 meses",
+            "Serviço de Instalação (loja)": "Não Possui"
         },
         "media": [
             {
                 "type": "video",
-                "src": "https://www.w3schools.com/html/mov_bbb.mp4",
-                "thumb": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80"
+                "src": "assets/video/fone.mp4",
+                "thumb": "assets/img/fone1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80"
+                "src": "assets/img/fone1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&q=80"
+                "src": "assets/img/fone2.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1572569438062-cba201414156?w=800&q=80"
+                "src": "assets/img/fone3.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80"
-            },
-            {
-                "type": "image",
-                "src": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80"
+                "src": "assets/img/fone4.webp"
             }
         ]
     },
     {
         "id": 2,
-        "name": "Notebook",
-        "description": "Notebook de alta performance para trabalho e estudos. Processamento rápido e design elegante.",
+        "name": "Notebook Acer Aspire 5 Ryzen 5 8Gb Ram 256Gb Ssd Tela de 15,6\" Windows 11 - Bivolt",
+        "description": "Portátil e elegante, o Notebook Acer Aspire 5 conta com processador AMD Ryzen™ 5 5500U e placa Radeon™ Graphics, garantindo excelente desempenho para criar, editar e trabalhar com fluidez.",
         "price": 3500.00,
-        "details": "Insira aqui todos os detalhes longos sobre o notebook. Descreva o processador, placa de vídeo, teclado e acabamento.",
+        "details": "Suas tarefas com mais fluidez<br>Os notebooks da linha Aspire 5 são convenientemente portáteis e elegantes para acompanhar suas tarefas do dia a dia. Os recursos tecnológicos de sua confiança ao seu lado sempre que precisar. E agora, o Processador AMD Ryzen™ 5 5500U e a placa de vídeo (GPU) AMD Radeon™ Graphics chegou na família, potencializando seu desempenho. Você cria, edita, compartilha e assiste vídeos, fotos e imagens sem dificuldades.<br><br>AMD Radeon™ Graphics<br>Uma máquina dessa precisa do melhor. A placa AMD Radeon™ Graphics com memória compartilhada com a memória RAM é construída com tecnologia de ponta, que molda os melhores notebooks do mundo. Agora, nada será pesado demais para o seu poder.<br><br>Aproveite todos os espaços<br>Armazene tudo que você precisa e um pouco mais. Guarde fotos, vídeos, documentos e planilhas importantes.<br><br>Fique conectado pelo tempo que precisar<br>Conecte-se com rapidez, tenha acesso a outros gadgets e transfira dados usando diferentes tecnologias.<br><br>Características:<br>Sistema Operacional: Windows 11 Home 64-bits.<br>Processador: AMD Ryzen™ 5 5500U com 6 núcleos até 4.0 GHz.<br>Placa Gráfica: AMD Radeon™ Graphics com memória compartilhada.<br>Teclado: ABNT 2.<br>Memória: 8 GB RAM DDR4.<br>Armazenamento: 256 GB SSD.<br>Tela: 15,6” Full HD (1920 x 1080) 60 Hz 250 nits.<br>Bateria: Até 4343mAh.<br>Conectividade: Wi-Fi 6, Bluetooth 5.0, LAN RJ-45 Gigabit Ethernet.<br><br>Especificações Técnicas:<br>Marca: Acer.<br>Modelo: Aspire 5 (A515-45-R5AT).<br>Dimensões (LxAxP): 36,3 x 1,7 x 25cm. Peso: 1,76kg.<br>Conteúdo: 01 Notebook, 01 Fonte, Manual.<br>Garantia: 1 Ano.",
         "specs": {
-            "Marca": "A definir",
-            "Processador": "A definir",
-            "Armazenamento": "SSD 512GB",
-            "Memória RAM": "16GB"
+            "SKU": "414237-1",
+            "Código de barras": "4711121844782",
+            "Marca": "Acer",
+            "Garantia de fábrica": "12 meses",
+            "Indicação": "Essencial (Estudante)",
+            "Memória": "8 GB"
         },
         "media": [
             {
-                "type": "image",
-                "src": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80"
+                "type": "video",
+                "src": "assets/video/notebook.mp4",
+                "thumb": "assets/img/notebook1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1531297172864-df224ea1f122?w=800&q=80"
+                "src": "assets/img/notebook1.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/notebook2.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/notebook3.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/notebook4.webp"
             }
         ]
     },
     {
         "id": 3,
-        "name": "Smart TV",
-        "description": "Smart TV com resolução 4K e acesso nativo aos seus aplicativos de streaming favoritos.",
+        "name": "Smart Tv 55'' Tcl Qled 4K 55P7k Google Tv Wi-Fi Dual Band",
+        "description": "Transforme sua sala em um centro de entretenimento com a TCL QLED 55P7K. Com resolução 4K UHD, Google TV e tecnologia Dolby Vision + Atmos, ela oferece imagem e som de cinema na sua casa.",
         "price": 2800.00,
-        "details": "Insira aqui todos os detalhes da TV. Fale sobre as tecnologias de imagem, brilho, som imersivo e conectividade.",
+        "details": "Experiência Visual Incomparável<br>Descubra a magia da TCL QLED SMART TV 55” 55P7K 4K UHD GOOGLE TV e transforme sua sala de estar em um verdadeiro centro de entretenimento. Com tecnologia QLED e resolução 4K UHD, ela oferece uma qualidade de imagem impressionante, tornando seus filmes e séries favoritos uma experiência visual imersiva.<br><br>Tecnologia e Inovação<br>Equipado com o avançado sistema operacional Google TV, esse modelo garante acesso rápido e fácil a conteúdos ilimitados, tudo em um só lugar. Conecte-se ao Wi-Fi e desfrute de recursos inteligentes que elevam sua experiência com a TV a um novo patamar.<br><br>Áudio e Conectividade<br>Com Dolby Vision e Atmos, cada cena ganha vida com som de alta qualidade e efeitos visuais impressionantes. O Bluetooth integrado permite a conexão de dispositivos externos, facilitando o compartilhamento de conteúdos e proporcionando mais liberdade para assistir do seu jeito.<br><br>Principais Características e Benefícios:<br>- Tecnologia QLED: Imagens mais nítidas e cores vibrantes.<br>- Resolução 4K UHD: Detalhes incríveis para uma imersão total.<br>- Google TV: Acesso fácil a conteúdos de mídia.<br>- Conectividade Bluetooth.<br>- Dolby Vision + Atmos.<br><br>Tamanho do aparelho com pedestal (LxAxP) 122,6 x 77,6 x 28cm.<br>Tamanho do aparelho sem pedestal (LxAxP) 122,6 x 71,1 x 7,3cm.<br><br>Design e Sofisticação<br>Com um design refinado e moderno, esta TV de 55 polegadas se integra perfeitamente a qualquer ambiente.<br><br>A TCL QLED SMART TV 55” 55P7K é perfeita para quem busca qualidade, inovação e estilo.",
         "specs": {
-            "Marca": "A definir",
-            "Resolução": "4K UHD",
-            "Tamanho": "50 Polegadas",
-            "Sistema": "Smart"
+            "SKU": "426248-1",
+            "Código de barras": "7899968301808",
+            "Garantia de fábrica": "12 meses",
+            "Marca": "TCL",
+            "Gaming hub": "Não",
+            "Tipo de tela": "QLED",
+            "Resolução": "QLED",
+            "Frequência": "60",
+            "Tamanho em polegadas": "55\""
         },
         "media": [
             {
-                "type": "image",
-                "src": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80"
+                "type": "video",
+                "src": "assets/video/tv.mp4",
+                "thumb": "assets/img/tv1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1577979749830-f1d742b96791?w=800&q=80"
+                "src": "assets/img/tv1.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv2.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv3.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv4.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv5.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv6.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv7.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/tv8.webp"
             }
         ]
     },
     {
         "id": 4,
-        "name": "Caixa de Som",
-        "description": "Caixa de som Bluetooth potente, com graves profundos e design resistente.",
+        "name": "Caixa de Som Bluetooth Waaw Alok Speaker Beat 1000",
+        "description": "Anime qualquer ambiente com a Caixa de Som WAAW BEAT 1000. Ela oferece 70W RMS de potência, proteção IPX4 contra respingos, show de luzes LED e conexões para instrumentos e microfones.",
         "price": 650.00,
-        "details": "Insira os detalhes sobre a durabilidade da bateria, potência sonora, conectividade e se possui resistência à água.",
+        "details": "Qualidade de som refinada e liberdade total<br>Experiência imersiva com duas entradas P10, solte a voz no karaokê com os amigos ou crie o seu som conectando guitarras e instrumentos elétricos. Conecte seus dispositivos favoritos, কাশী, smartphones, tablets ou laptops, utilizando a entrada USB, USB-C e a entrada auxiliar P2.<br><br>Conectividade incomparável<br>Compartilhe momentos únicos com a Caixa de Som Bluetooth WAAW BEAT 1000, que oferece até 4h30 de reprodução. Com proteção IPX4, é resistente a respingos, ideal para uso em áreas externas ou próximas à piscina.<br><br>Potência e resistência<br>Com 70W RMS de potência e o reforço de graves do Power Bass, ela entrega um som encorpado e envolvente. O show de luzes do LED central e das barras laterais transforma qualquer ambiente em uma verdadeira festa, acompanhando a batida da música.<br><br>Momentos intensos<br>Use o WAAW PLUS, com a tecnologia TWS, que permite parear duas caixas Beat 1000 no mesmo dispositivo e criar um som estéreo mais imersivo e potente.<br><br>Principais Características:<br>- Som estável por até 10 metros com a conexão por Bluetooth V5.3.<br>- Resistência à água (IPX4).<br>- Show de luzes sincronizadas.<br>- Bateria recarregável.<br>- 2 entradas P10, USB Tipo A, USB-C e AUX P2.<br>- Power Bass.<br><br>Experiência Sonora Única<br>O WAAW Speaker Bluetooth BEAT 1000 torna a experiência de ouvir música algo verdadeiramente único. Seu design leve e compacto, sem perder o estilo, facilita o transporte entre diferentes ambientes.",
         "specs": {
-            "Marca": "A definir",
-            "Conexão": "Bluetooth",
-            "Bateria": "A definir"
+            "SKU": "441541-1",
+            "Código de barras": "7899831342075",
+            "Garantia de fábrica": "12 meses",
+            "Marca": "Waaw",
+            "Tipo de alimentação": "Bateria recarregável",
+            "Resistência": "Resistente a água",
+            "Entradas": "USB, auxiliar e plug",
+            "Configurações de canais": "2.1",
+            "Conectividade": "Bluetooth 5.3",
+            "Potência de saída": "70RMS"
         },
         "media": [
             {
-                "type": "image",
-                "src": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80"
+                "type": "video",
+                "src": "assets/video/som.mp4",
+                "thumb": "assets/img/som1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1589003071536-467812906bb1?w=800&q=80"
+                "src": "assets/img/som1.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/som2.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/som3.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/som4.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/som5.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/som6.webp"
             }
         ]
     },
     {
         "id": 5,
-        "name": "Videogame",
-        "description": "Console de última geração para rodar os jogos mais recentes com fluidez incrível.",
+        "name": "Console Nintendo Switch Oled com Super Mario Bros Wonder",
+        "description": "Experimente a versatilidade de jogar onde quiser com a tela OLED vibrante do Nintendo Switch. Inclui 64GB de armazenamento e o aclamado jogo Super Mario Bros. Wonder para diversão imediata.",
         "price": 2500.00,
-        "details": "Insira a descrição completa do console. Fale sobre os gráficos, controle, capacidade do HD e jogos inclusos.",
+        "details": "Experiência de Jogo Inovadora e Imersiva<br>Descubra o mundo do entretenimento com o Console Nintendo Switch OLED Super Mario Bros. Wonder. Este console não é apenas um sistema de jogo portátil; ele redefine a maneira como interagimos com jogos, oferecendo flexibilidade incomparável e experiências visuais de tirar o fôlego. Com uma tela OLED vibrante e clara, cada aventura ganha vida com cores intensas e detalhes nítidos.<br><br>Sofisticação e Desempenho<br>A Nintendo continua sua tradição de inovação, esse modelo vem com impressionantes 64GB de armazenamento, permitindo que você guarde não apenas seus jogos favoritos, mas também atualizações e conteúdos baixáveis sem preocupações. O design ergonômico garante jogabilidade confortável, seja em modo portátil ou conectado à TV. A inclusão do jogo Super Mario Bros. Wonder em versão digital traz diversão garantida para toda a família.<br><br>Conectividade e Entretenimento Sem Limites<br>Compatível com recursos online da Nintendo, como jogos online e backup em nuvem, mediante assinatura vendida separadamente.<br><br>Principais Características e Benefícios:<br>- 64GB de armazenamento: Mais espaço para seus jogos.<br>- Tela OLED vibrante: Imagens intensas e nítidas.<br>- Ergonomia e portabilidade: Design confortável em qualquer lugar.<br><br>Conclusão: O Seu Próximo Nível de Jogo<br>O Console Nintendo Switch OLED Super Mario Bros. Wonder é mais que um simples videogame; é uma plataforma de entretenimento completa. Seu design inovador, capacidade de armazenamento estendida e serviços online robustos fazem deste console a escolha perfeita.",
         "specs": {
-            "Marca": "A definir",
-            "Armazenamento": "1TB",
-            "Resolução Máxima": "4K"
+            "SKU": "436945-1",
+            "Código de barras": "0045496885281",
+            "Garantia de fábrica": "12 meses",
+            "Marca": "Nintendo",
+            "Armazenamento": "64GB",
+            "Jogos inclusos": "Sim"
         },
         "media": [
             {
-                "type": "image",
-                "src": "https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=800&q=80"
+                "type": "video",
+                "src": "assets/video/game.mp4",
+                "thumb": "assets/img/game1.webp"
             },
             {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=800&q=80"
+                "src": "assets/img/game1.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/game2.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/game3.webp"
+            },
+            {
+                "type": "image",
+                "src": "assets/img/game4.webp"
             }
         ]
     }

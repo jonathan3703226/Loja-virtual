@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Fone De Ouvido Sem Fio JBL Wave Beam 2",
         "description": "Equipado com Bluetooth 5.3, o Wave Beam 2 oferece conexão estável. Duração de bateria de até 40 horas e Cancelamento de Ruído (ANC) para imersão total.",
-        "price": 289.9,
+        "price": 250.00,
         "details": "Transforme sua experiência sonora com o Fone de Ouvido Sem Fio Wave Beam 2 JBL. Combina o melhor da tecnologia sem fio com o design icônico da JBL, proporcionando liberdade total de movimento. Conta com 4 microfones para chamadas nítidas, resistência à água e poeira (IP54) e pareamento incrivelmente rápido graças ao Google Fast Pair e Microsoft Swift Pair.",
         "specs": {
             "Marca": "JBL",
@@ -41,6 +41,96 @@
             {
                 "type": "image",
                 "src": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Notebook",
+        "description": "Notebook de alta performance para trabalho e estudos. Processamento rápido e design elegante.",
+        "price": 3500.00,
+        "details": "Insira aqui todos os detalhes longos sobre o notebook. Descreva o processador, placa de vídeo, teclado e acabamento.",
+        "specs": {
+            "Marca": "A definir",
+            "Processador": "A definir",
+            "Armazenamento": "SSD 512GB",
+            "Memória RAM": "16GB"
+        },
+        "media": [
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1531297172864-df224ea1f122?w=800&q=80"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Smart TV",
+        "description": "Smart TV com resolução 4K e acesso nativo aos seus aplicativos de streaming favoritos.",
+        "price": 2800.00,
+        "details": "Insira aqui todos os detalhes da TV. Fale sobre as tecnologias de imagem, brilho, som imersivo e conectividade.",
+        "specs": {
+            "Marca": "A definir",
+            "Resolução": "4K UHD",
+            "Tamanho": "50 Polegadas",
+            "Sistema": "Smart"
+        },
+        "media": [
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1577979749830-f1d742b96791?w=800&q=80"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Caixa de Som",
+        "description": "Caixa de som Bluetooth potente, com graves profundos e design resistente.",
+        "price": 650.00,
+        "details": "Insira os detalhes sobre a durabilidade da bateria, potência sonora, conectividade e se possui resistência à água.",
+        "specs": {
+            "Marca": "A definir",
+            "Conexão": "Bluetooth",
+            "Bateria": "A definir"
+        },
+        "media": [
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1589003071536-467812906bb1?w=800&q=80"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Videogame",
+        "description": "Console de última geração para rodar os jogos mais recentes com fluidez incrível.",
+        "price": 2500.00,
+        "details": "Insira a descrição completa do console. Fale sobre os gráficos, controle, capacidade do HD e jogos inclusos.",
+        "specs": {
+            "Marca": "A definir",
+            "Armazenamento": "1TB",
+            "Resolução Máxima": "4K"
+        },
+        "media": [
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=800&q=80"
+            },
+            {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=800&q=80"
             }
         ]
     }

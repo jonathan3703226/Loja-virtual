@@ -76,8 +76,6 @@ class TechStore {
             if (action === 'next-media') this.navigateMedia(id, 1);
             if (action === 'show-details') this.showModalInfo(id, 'details');
             if (action === 'show-specs') this.showModalInfo(id, 'specs');
-            
-            // Cliques das setinhas de rolagem da galeria de miniaturas
             if (action === 'scroll-thumbs-up') this.scrollThumbs(id, -1);
             if (action === 'scroll-thumbs-down') this.scrollThumbs(id, 1);
         });
@@ -91,7 +89,6 @@ class TechStore {
             if (action === 'cart-qty-inc') this.updateCartItemQty(id, 1);
         });
     }
-
     // Move a barra de miniaturas para cima ou para baixo
     scrollThumbs(productId, direction) {
         const track = document.getElementById(`track-${productId}`);
@@ -333,6 +330,7 @@ class TechStore {
         }
 
         checkoutArea.style.display = 'block';
+        // (O restante do loop for continua igual, não precisa alterar)
         for (const [id, qty] of Object.entries(this.cart)) {
             const p = this.products.find(p => p.id === parseInt(id));
             if(!p) continue;
@@ -362,13 +360,10 @@ class TechStore {
     }
 
     processCheckout() {
-        const select = document.getElementById('payment-method-select');
-        if (!select.value) { alert("Selecione a forma de pagamento."); return; }
-        
-        const paymentCode = parseInt(select.value);
-        const paymentName = select.options[select.selectedIndex].text.split(' - ')[1].split(' (')[0];
-        let totalCompra = 0; let receiptRows = '';
+        let totalCompra = 0; 
+        let receiptRows = '';
 
+        // Calcula o total e monta a tabela de produtos
         for (const [id, qty] of Object.entries(this.cart)) {
             const p = this.products.find(p => p.id === parseInt(id));
             const subtotal = p.price * qty;
@@ -376,34 +371,100 @@ class TechStore {
             receiptRows += `<tr><td><strong>${qty}x</strong> ${p.name.split(',')[0]}</td><td>${this.formatBRL(p.price)}</td><td>${this.formatBRL(subtotal)}</td></tr>`;
         }
 
-        let desconto = (totalCompra >= 5000 && paymentCode === 1) ? (totalCompra * 0.10) : 0;
-        const totalPagar = totalCompra - desconto;
-
+        // Monta o modal com o Select de pagamento dentro dele
         document.getElementById('modal-content').innerHTML = `
             <div class="modal-header">
-                <h2>Obrigado pela compra!</h2>
+                <h2>Resumo da Compra</h2>
                 <button class="close-modal" id="btn-close-checkout">×</button>
             </div>
             <table class="receipt-table">
                 <thead><tr><th>Produto</th><th>Preço Un.</th><th>Subtotal</th></tr></thead>
                 <tbody>${receiptRows}</tbody>
             </table>
-            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px;">
-                <div class="summary-row"><span>Formato:</span><strong>${paymentName}</strong></div>
+            
+            <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                <label for="modal-payment-select" style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Forma de Pagamento:</label>
+                <select id="modal-payment-select" class="custom-select" style="margin-bottom: 20px;">
+                    <option value="" disabled selected>-- Selecione para continuar --</option>
+                    <option value="1">1 - À vista (10% OFF em compras > R$5.000)</option>
+                    <option value="2">2 - Cartão de Débito</option>
+                    <option value="3">3 - Cartão de Crédito</option>
+                </select>
+
                 <div class="summary-row"><span>Total Produtos:</span><span>${this.formatBRL(totalCompra)}</span></div>
-                ${desconto > 0 ? `<div class="summary-row" style="color:#059669;"><span>Desconto:</span><span>- ${this.formatBRL(desconto)}</span></div>` : ''}
+                
+                <div class="summary-row" id="discount-row" style="color:#059669; display: none;">
+                    <span>Desconto:</span><span id="discount-value">R$ 0,00</span>
+                </div>
+                
                 <div class="summary-row" style="font-size:22px; font-weight:700; color:var(--primary); margin-top:15px; padding-top:15px; border-top:1px solid var(--border);">
-                    <span>Total Pago:</span><span>${this.formatBRL(totalPagar)}</span>
+                    <span>Total a Pagar:</span><span id="final-total">${this.formatBRL(totalCompra)}</span>
                 </div>
             </div>
-            <button class="btn-add-cart-shopee" id="btn-finish-modal" style="margin-top:20px;">Limpar Carrinho</button>
+            
+            <button class="btn-add-cart-shopee" id="btn-finish-modal" style="margin-top:20px;" disabled>
+                Finalizar Compra
+            </button>
         `;
+        
         document.getElementById('modal-overlay').classList.remove('hidden');
-        this.toggleCart(); 
+        this.toggleCart(); // Fecha o carrinho lateral
 
+        // Elementos interativos do modal
+        const paymentSelect = document.getElementById('modal-payment-select');
+        const btnFinish = document.getElementById('btn-finish-modal');
+        const discountRow = document.getElementById('discount-row');
+        const discountValue = document.getElementById('discount-value');
+        const finalTotal = document.getElementById('final-total');
+
+        // Escuta a seleção de pagamento para calcular desconto e liberar o botão
+        paymentSelect.addEventListener('change', (e) => {
+            btnFinish.disabled = false; // Libera o botão
+            
+            let desconto = 0;
+            if (e.target.value === '1' && totalCompra >= 5000) {
+                desconto = totalCompra * 0.10;
+            }
+            
+            if (desconto > 0) {
+                discountRow.style.display = 'flex';
+                discountValue.textContent = `- ${this.formatBRL(desconto)}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+            
+            finalTotal.textContent = this.formatBRL(totalCompra - desconto);
+        });
+
+        // Fechar no X
         document.getElementById('btn-close-checkout').addEventListener('click', () => this.closeModal());
-        document.getElementById('btn-finish-modal').addEventListener('click', () => {
-            this.cart = {}; this.saveCart(); location.reload();
+        
+        btnFinish.addEventListener('click', () => {
+            // 1. Limpa o carrinho
+            this.cart = {}; 
+            this.saveCart(); 
+            this.updateCartDropdown(); 
+
+            // 2. Substitui o conteúdo do modal pela tela de Sucesso
+            document.getElementById('modal-content').innerHTML = `
+                <div style="text-align: center; padding: 30px 20px;">
+                    <div style="background: #10B981; color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <h2 style="font-size: 28px; color: var(--text-main); margin-bottom: 15px; letter-spacing: -0.5px;">Parabéns pela sua compra!</h2>
+                    <p style="font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 35px;">
+                        Seu pedido foi processado com sucesso. Em breve, você receberá todas as atualizações no seu e-mail.
+                    </p>
+                    <button class="btn-checkout-final" id="btn-close-success" style="width: 100%; padding: 16px; font-size: 16px;">
+                        Voltar para a Loja
+                    </button>
+                </div>
+            `;
+            
+            // 3. O botão final agora apenas fecha o modal e o usuário continua no site vazio
+            document.getElementById('btn-close-success').addEventListener('click', () => this.closeModal());
         });
     }
 

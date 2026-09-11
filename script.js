@@ -117,10 +117,8 @@ class TechStore {
             const firstMedia = product.media[0];
             const isFirstVideo = firstMedia.type === 'video';
             const mainMediaInner = isFirstVideo
-                ? `<video src="${firstMedia.src}" muted loop playsinline id="media-${product.id}"></video>`
-                : `<img src="${firstMedia.src}" id="media-${product.id}" alt="${product.name}">`;
-
-            card.innerHTML = `
+                ? `<video src="${firstMedia.src}" autoplay muted loop playsinline id="media-${product.id}"></video>`
+                : `<img src="${firstMedia.src}" id="media-${product.id}" alt="${product.name}">`; card.innerHTML = `
                 <div class="product-gallery">
                     <div class="carousel-wrapper-vertical">
                         <div class="thumbnails-track-vertical" id="track-${product.id}">
@@ -170,29 +168,80 @@ class TechStore {
             listElement.appendChild(card);
 
             const mediaContent = card.querySelector(`#media-content-${product.id}`);
-            // Verifica se o aparelho tem tela touch (Celular/Tablet)
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            // --- EVENTOS UNIFICADOS (DESKTOP E MOBILE) ---
+            
+            // 1. Mouse Enter (Apenas Desktop)
+            mediaContent.addEventListener('mouseenter', () => {
+                if (window.innerWidth <= 900) return;
+                const mediaElement = document.getElementById(`media-${product.id}`);
+                const cursor = document.getElementById('video-cursor');
+                if (mediaElement && mediaElement.tagName === 'VIDEO' && cursor) {
+                    cursor.classList.remove('hidden');
+                    cursor.textContent = mediaElement.paused ? '▶' : '⏸';
+                }
+            });
 
-            if (!isTouchDevice) {
-                // Se for PC: Mantém o efeito de mouse original
-                mediaContent.addEventListener('mouseenter', () => this.handleMediaHover(product.id, true));
-                mediaContent.addEventListener('mouseleave', () => this.handleMediaHover(product.id, false));
-                mediaContent.addEventListener('mousemove', (e) => this.zoomImage(e, mediaContent, product.id));
-            } else {
-                // Se for Celular: Adiciona o evento de toque
-                mediaContent.addEventListener('click', () => {
-                    const mediaElement = document.getElementById(`media-${product.id}`);
-                    if (mediaElement && mediaElement.tagName === 'VIDEO') {
-                        // Toca ou pausa o vídeo com um toque
-                        mediaElement.paused ? mediaElement.play() : mediaElement.pause();
-                    } else if (mediaElement && mediaElement.tagName === 'IMG') {
-                        // Abre a imagem em tela cheia para dar zoom com os dedos
+            // 2. Mouse Leave (Apenas Desktop)
+            mediaContent.addEventListener('mouseleave', () => {
+                if (window.innerWidth <= 900) return;
+                const mediaElement = document.getElementById(`media-${product.id}`);
+                const cursor = document.getElementById('video-cursor');
+                if (mediaElement && mediaElement.tagName === 'VIDEO' && cursor) {
+                    cursor.classList.add('hidden');
+                } else if (mediaElement && mediaElement.tagName === 'IMG') {
+                    mediaElement.style.transform = 'scale(1)';
+                }
+            });
+
+            // 3. Movimento do Mouse (Apenas Desktop - Faz o Cursor do vídeo seguir o ponteiro ou dá Zoom)
+            mediaContent.addEventListener('mousemove', (e) => {
+                if (window.innerWidth <= 900) return;
+                const mediaElement = document.getElementById(`media-${product.id}`);
+                const cursor = document.getElementById('video-cursor');
+
+                if (e.target.closest('.thumbnails') || e.target.closest('button')) {
+                    if (cursor) cursor.classList.add('hidden');
+                    return;
+                }
+
+                const rect = mediaContent.getBoundingClientRect();
+                if (mediaElement && mediaElement.tagName === 'VIDEO' && cursor) {
+                    cursor.classList.remove('hidden');
+                    cursor.style.left = `${e.clientX}px`;
+                    cursor.style.top = `${e.clientY}px`;
+                } else if (mediaElement && mediaElement.tagName === 'IMG') {
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    mediaElement.style.transformOrigin = `${x}% ${y}%`;
+                    mediaElement.style.transform = 'scale(2.5)';
+                }
+            });
+
+            // 4. Clique Principal (Funciona no Desktop e no Celular)
+            mediaContent.addEventListener('click', () => {
+                const mediaElement = document.getElementById(`media-${product.id}`);
+                const cursor = document.getElementById('video-cursor');
+                const isMobile = window.innerWidth <= 900;
+
+                if (mediaElement && mediaElement.tagName === 'VIDEO') {
+                    // Toca/Pausa o vídeo ao clicar
+                    if (mediaElement.paused) {
+                        mediaElement.play().catch(() => {});
+                        if (cursor && !isMobile) cursor.textContent = '⏸';
+                    } else {
+                        mediaElement.pause();
+                        if (cursor && !isMobile) cursor.textContent = '▶';
+                    }
+                } else if (mediaElement && mediaElement.tagName === 'IMG') {
+                    // Se for imagem e estiver no mobile, abre a galeria Modal em tela cheia para Zoom com os dedos
+                    if (isMobile) {
                         this.openImageFullscreen(mediaElement.src, product.name);
                     }
-                });
-            }
+                }
+            });
         });
-        // --- COLOQUE ISSO NO FINAL DA FUNÇÃO renderProducts() ---
+       // --- COLOQUE ISSO NO FINAL DA FUNÇÃO renderProducts() ---
 
         // 1. Observer para animar os cards surgindo na tela
         const cards = document.querySelectorAll('.product-card');
@@ -218,7 +267,7 @@ class TechStore {
                     entry.target.pause();
                 }
             });
-        }, { threshold: 0.6 }); // Dispara quando 60% do vídeo estiver centralizado na tela
+        }, { threshold: 0.4}); // Dispara quando 60% do vídeo estiver centralizado na tela
 
         videos.forEach(video => videoObserver.observe(video));
     }
@@ -231,10 +280,33 @@ class TechStore {
 
         parentContainer.dataset.currentIndex = mediaIndex;
 
-        if (media.type === 'video') {
-            container.innerHTML = `<video src="${media.src}" muted loop id="media-${productId}"></video>`;
+       if (media.type === 'video') {
+            // Coloca o vídeo com Autoplay Nativo ativado
+            container.innerHTML = `<video src="${media.src}" id="media-${productId}" autoplay loop muted playsinline></video>`;
+
+            // Aguarda um instante e avisa o navegador sobre o novo vídeo
+            setTimeout(() => {
+                const newVideo = document.getElementById(`media-${productId}`);
+                if (newVideo) {
+                    newVideo.play().catch(() => { });
+                    
+                    // Adiciona um Observer exclusivo para ESTE novo vídeo
+                    // (Resolve o bug do vídeo rodar escondido no celular ao rolar a tela)
+                    new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.play().catch(() => {});
+                            } else {
+                                entry.target.pause();
+                            }
+                        });
+                    }, { threshold: 0.6 }).observe(newVideo);
+                }
+            }, 50);
+
         } else {
-            container.innerHTML = `<img src="${media.src}" id="media-${productId}" alt="${product.name}">`;
+            // Coloca a imagem normalmente
+            container.innerHTML = `<img src="${media.src}" id="media-${productId}" alt="Produto">`;
         }
 
         const track = document.getElementById(`track-${productId}`);

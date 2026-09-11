@@ -1,9 +1,9 @@
 class TechStore {
     constructor() {
         this.products = [];
-        this.inputQtys = {}; 
+        this.inputQtys = {};
         const savedCart = localStorage.getItem('nextech_cart');
-        this.cart = savedCart ? JSON.parse(savedCart) : {}; 
+        this.cart = savedCart ? JSON.parse(savedCart) : {};
         this.init();
     }
 
@@ -12,12 +12,12 @@ class TechStore {
             const response = await fetch('produtos.json');
             this.products = await response.json();
             this.products.forEach(p => this.inputQtys[p.id] = 1);
-            
+
             // Inicia a criação do cursor customizado de vídeo
-            this.createCursor(); 
-            
+            this.createCursor();
+
             this.renderProducts();
-            this.updateCartDropdown(); 
+            this.updateCartDropdown();
             this.setupGlobalEventListeners();
         } catch (error) {
             console.error("Erro ao carregar:", error);
@@ -76,7 +76,7 @@ class TechStore {
             if (action === 'next-media') this.navigateMedia(id, 1);
             if (action === 'show-details') this.showModalInfo(id, 'details');
             if (action === 'show-specs') this.showModalInfo(id, 'specs');
-            
+
         });
 
         document.getElementById('cart-dropdown').addEventListener('click', (e) => {
@@ -97,12 +97,12 @@ class TechStore {
 
     renderProducts() {
         const listElement = document.getElementById('product-list');
-        listElement.innerHTML = ''; 
+        listElement.innerHTML = '';
 
         this.products.forEach(product => {
             const card = document.createElement('article');
             card.className = 'product-card';
-            
+
             const thumbsHTML = product.media.map((item, index) => {
                 const isVideo = item.type === 'video';
                 const imgSrc = isVideo ? item.thumb : item.src;
@@ -116,11 +116,11 @@ class TechStore {
 
             const firstMedia = product.media[0];
             const isFirstVideo = firstMedia.type === 'video';
-            const mainMediaInner = isFirstVideo 
-                ? `<video src="${firstMedia.src}" muted loop id="media-${product.id}"></video>`
+            const mainMediaInner = isFirstVideo
+                ? `<video src="${firstMedia.src}" muted loop playsinline id="media-${product.id}"></video>`
                 : `<img src="${firstMedia.src}" id="media-${product.id}" alt="${product.name}">`;
 
-           card.innerHTML = `
+            card.innerHTML = `
                 <div class="product-gallery">
                     <div class="carousel-wrapper-vertical">
                         <div class="thumbnails-track-vertical" id="track-${product.id}">
@@ -170,10 +170,57 @@ class TechStore {
             listElement.appendChild(card);
 
             const mediaContent = card.querySelector(`#media-content-${product.id}`);
-            mediaContent.addEventListener('mouseenter', () => this.handleMediaHover(product.id, true));
-            mediaContent.addEventListener('mouseleave', () => this.handleMediaHover(product.id, false));
-            mediaContent.addEventListener('mousemove', (e) => this.zoomImage(e, mediaContent, product.id));
+            // Verifica se o aparelho tem tela touch (Celular/Tablet)
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (!isTouchDevice) {
+                // Se for PC: Mantém o efeito de mouse original
+                mediaContent.addEventListener('mouseenter', () => this.handleMediaHover(product.id, true));
+                mediaContent.addEventListener('mouseleave', () => this.handleMediaHover(product.id, false));
+                mediaContent.addEventListener('mousemove', (e) => this.zoomImage(e, mediaContent, product.id));
+            } else {
+                // Se for Celular: Adiciona o evento de toque
+                mediaContent.addEventListener('click', () => {
+                    const mediaElement = document.getElementById(`media-${product.id}`);
+                    if (mediaElement && mediaElement.tagName === 'VIDEO') {
+                        // Toca ou pausa o vídeo com um toque
+                        mediaElement.paused ? mediaElement.play() : mediaElement.pause();
+                    } else if (mediaElement && mediaElement.tagName === 'IMG') {
+                        // Abre a imagem em tela cheia para dar zoom com os dedos
+                        this.openImageFullscreen(mediaElement.src, product.name);
+                    }
+                });
+            }
         });
+        // --- COLOQUE ISSO NO FINAL DA FUNÇÃO renderProducts() ---
+
+        // 1. Observer para animar os cards surgindo na tela
+        const cards = document.querySelectorAll('.product-card');
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show-card');
+                    cardObserver.unobserve(entry.target); // Anima apenas a primeira vez que aparece
+                }
+            });
+        }, { threshold: 0.1 }); // Dispara quando 10% do card aparecer
+
+        cards.forEach(card => cardObserver.observe(card));
+
+        // 2. Observer para tocar/pausar vídeos automaticamente
+        const videos = document.querySelectorAll('video');
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Tenta dar play automaticamente (o navegador só permite se o vídeo tiver 'muted')
+                    entry.target.play().catch(() => { console.log("Autoplay bloqueado pelo navegador"); });
+                } else {
+                    entry.target.pause();
+                }
+            });
+        }, { threshold: 0.6 }); // Dispara quando 60% do vídeo estiver centralizado na tela
+
+        videos.forEach(video => videoObserver.observe(video));
     }
 
     setMainMedia(productId, mediaIndex, thumbElement = null) {
@@ -181,9 +228,9 @@ class TechStore {
         const media = product.media[mediaIndex];
         const container = document.getElementById(`media-content-${productId}`);
         const parentContainer = document.getElementById(`container-${productId}`);
-        
+
         parentContainer.dataset.currentIndex = mediaIndex;
-        
+
         if (media.type === 'video') {
             container.innerHTML = `<video src="${media.src}" muted loop id="media-${productId}"></video>`;
         } else {
@@ -193,7 +240,7 @@ class TechStore {
         const track = document.getElementById(`track-${productId}`);
         const thumbs = track.querySelectorAll('.thumb');
         thumbs.forEach(t => t.classList.remove('active'));
-        
+
         if (!thumbElement) thumbElement = thumbs[mediaIndex];
         if (thumbElement) thumbElement.classList.add('active');
     }
@@ -202,11 +249,11 @@ class TechStore {
         const product = this.products.find(p => p.id === productId);
         const container = document.getElementById(`container-${productId}`);
         let currentIndex = parseInt(container.dataset.currentIndex || 0);
-        
+
         currentIndex += direction;
         if (currentIndex < 0) currentIndex = product.media.length - 1;
         if (currentIndex >= product.media.length) currentIndex = 0;
-        
+
         this.setMainMedia(productId, currentIndex);
     }
 
@@ -214,7 +261,7 @@ class TechStore {
     handleMediaHover(productId, isHover) {
         const mediaElement = document.getElementById(`media-${productId}`);
         const cursor = document.getElementById('video-cursor');
-        
+
         if (mediaElement && mediaElement.tagName === 'VIDEO') {
             if (isHover) {
                 mediaElement.play();
@@ -293,9 +340,9 @@ class TechStore {
     addToCart(productId) {
         const qtyToAdd = this.inputQtys[productId];
         this.cart[productId] = (this.cart[productId] || 0) + qtyToAdd;
-        this.inputQtys[productId] = 1; 
+        this.inputQtys[productId] = 1;
         document.getElementById(`input-qty-${productId}`).value = 1;
-        this.saveCart(); 
+        this.saveCart();
         this.updateCartDropdown();
         this.showToast(`✅ Adicionado ao carrinho!`);
     }
@@ -304,7 +351,7 @@ class TechStore {
         if (this.cart[productId]) {
             const newQty = this.cart[productId] + change;
             if (newQty > 0) this.cart[productId] = newQty;
-            else delete this.cart[productId]; 
+            else delete this.cart[productId];
             this.saveCart();
             this.updateCartDropdown();
         }
@@ -330,7 +377,7 @@ class TechStore {
         // (O restante do loop for continua igual, não precisa alterar)
         for (const [id, qty] of Object.entries(this.cart)) {
             const p = this.products.find(p => p.id === parseInt(id));
-            if(!p) continue;
+            if (!p) continue;
             const subtotal = p.price * qty;
             totalItems += qty; totalPrice += subtotal;
             const imgSrc = p.media.find(m => m.type === 'image') ? p.media.find(m => m.type === 'image').src : p.media[0].thumb;
@@ -357,7 +404,7 @@ class TechStore {
     }
 
     processCheckout() {
-        let totalCompra = 0; 
+        let totalCompra = 0;
         let receiptRows = '';
 
         // Calcula o total e monta a tabela de produtos
@@ -403,7 +450,7 @@ class TechStore {
                 Finalizar Compra
             </button>
         `;
-        
+
         document.getElementById('modal-overlay').classList.remove('hidden');
         this.toggleCart(); // Fecha o carrinho lateral
 
@@ -417,30 +464,30 @@ class TechStore {
         // Escuta a seleção de pagamento para calcular desconto e liberar o botão
         paymentSelect.addEventListener('change', (e) => {
             btnFinish.disabled = false; // Libera o botão
-            
+
             let desconto = 0;
             if (e.target.value === '1' && totalCompra >= 5000) {
                 desconto = totalCompra * 0.10;
             }
-            
+
             if (desconto > 0) {
                 discountRow.style.display = 'flex';
                 discountValue.textContent = `- ${this.formatBRL(desconto)}`;
             } else {
                 discountRow.style.display = 'none';
             }
-            
+
             finalTotal.textContent = this.formatBRL(totalCompra - desconto);
         });
 
         // Fechar no X
         document.getElementById('btn-close-checkout').addEventListener('click', () => this.closeModal());
-        
+
         btnFinish.addEventListener('click', () => {
             // 1. Limpa o carrinho
-            this.cart = {}; 
-            this.saveCart(); 
-            this.updateCartDropdown(); 
+            this.cart = {};
+            this.saveCart();
+            this.updateCartDropdown();
 
             // 2. Substitui o conteúdo do modal pela tela de Sucesso
             document.getElementById('modal-content').innerHTML = `
@@ -459,19 +506,35 @@ class TechStore {
                     </button>
                 </div>
             `;
-            
+
             // 3. O botão final agora apenas fecha o modal e o usuário continua no site vazio
             document.getElementById('btn-close-success').addEventListener('click', () => this.closeModal());
         });
     }
 
     closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
-    
+
     showToast(msg) {
         const toast = document.getElementById('toast');
         toast.textContent = msg; toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2500);
     }
+    openImageFullscreen(imgSrc, altText) {
+        const modalContent = document.getElementById('modal-content'); // Ajuste se o ID do seu modal for diferente
+        modalContent.innerHTML = `
+        <div class="modal-header">
+            <h2>${altText}</h2>
+            <button class="close-modal" id="btn-close-fullscreen">×</button>
+        </div>
+        <div class="fullscreen-img-wrapper">
+            <img src="${imgSrc}" alt="${altText}" class="fullscreen-img">
+        </div>
+    `;
+
+        document.getElementById('modal-overlay').classList.remove('hidden');
+        document.getElementById('btn-close-fullscreen').addEventListener('click', () => this.closeModal());
+    }
 }
+
 
 const store = new TechStore();

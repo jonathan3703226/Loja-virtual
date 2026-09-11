@@ -8,6 +8,9 @@ class TechStore {
     }
 
     async init() {
+        // Renderiza o rodapé assim que a aplicação inicia
+        this.renderFooter();
+
         try {
             const response = await fetch('produtos.json');
             this.products = await response.json();
@@ -24,7 +27,27 @@ class TechStore {
             document.getElementById('product-list').innerHTML = '<p>Erro ao carregar produtos.</p>';
         }
     }
+    renderFooter() {
+        if (document.querySelector('.site-footer')) return;
 
+        const footer = document.createElement('footer');
+        footer.className = 'site-footer';
+        footer.innerHTML = `
+            <div class="container footer-content">
+                <div class="footer-signature">
+                    <span>© Code by</span>
+                    <a href="https://github.com/jonathan3703226" target="_blank" rel="noopener noreferrer" class="github-badge">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        <span class="author-name">jonathancesar</span>
+                    </a>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(footer);
+    }
     // Cria o cursor de vídeo customizado (efeito de cor reversa)
     createCursor() {
         let cursor = document.getElementById('video-cursor');
@@ -168,9 +191,9 @@ class TechStore {
             listElement.appendChild(card);
 
             const mediaContent = card.querySelector(`#media-content-${product.id}`);
-            
+
             // --- EVENTOS UNIFICADOS (DESKTOP E MOBILE) ---
-            
+
             // 1. Mouse Enter (Apenas Desktop)
             mediaContent.addEventListener('mouseenter', () => {
                 if (window.innerWidth <= 900) return;
@@ -227,7 +250,7 @@ class TechStore {
                 if (mediaElement && mediaElement.tagName === 'VIDEO') {
                     // Toca/Pausa o vídeo ao clicar
                     if (mediaElement.paused) {
-                        mediaElement.play().catch(() => {});
+                        mediaElement.play().catch(() => { });
                         if (cursor && !isMobile) cursor.textContent = '⏸';
                     } else {
                         mediaElement.pause();
@@ -241,7 +264,7 @@ class TechStore {
                 }
             });
         });
-       // --- COLOQUE ISSO NO FINAL DA FUNÇÃO renderProducts() ---
+        // --- COLOQUE ISSO NO FINAL DA FUNÇÃO renderProducts() ---
 
         // 1. Observer para animar os cards surgindo na tela
         const cards = document.querySelectorAll('.product-card');
@@ -258,13 +281,13 @@ class TechStore {
 
         // 2. Observer para tocar/pausar vídeos automaticamente
         const videos = document.querySelectorAll('video');
-        
+
         // Verifica se a tela é mobile (limite de 900px)
-        const isMobile = window.innerWidth <= 900; 
-        
+        const isMobile = window.innerWidth <= 900;
+
         // Define threshold de 40% para celular e 60% para computador
-        const observerThreshold = isMobile ? 0.4 : 0.6; 
-        
+        const observerThreshold = isMobile ? 0.4 : 0.6;
+
         const videoObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -287,7 +310,7 @@ class TechStore {
 
         parentContainer.dataset.currentIndex = mediaIndex;
 
-      if (media.type === 'video') {
+        if (media.type === 'video') {
             // Cria o vídeo já com os atributos necessários
             container.innerHTML = `<video src="${media.src}" id="media-${productId}" autoplay loop muted playsinline></video>`;
 
@@ -295,12 +318,12 @@ class TechStore {
             if (newVideo) {
                 // Dá o play IMEDIATAMENTE após a criação, aproveitando o evento de clique original do usuário
                 newVideo.play().catch(() => { console.log("Autoplay retido pelo navegador"); });
-                
+
                 // Observador para pausar o vídeo caso o usuário role a tela para longe dele
                 new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            entry.target.play().catch(() => {});
+                            entry.target.play().catch(() => { });
                         } else {
                             entry.target.pause();
                         }

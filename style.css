@@ -14,7 +14,13 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background-color: var(--bg-color); color: var(--text-main); padding-top: 100px; padding-bottom: 60px; }
+/* Atualize a linha 15 do seu style.css */
+body { 
+    background-color: var(--bg-color); 
+    color: var(--text-main); 
+    padding-top: 100px; 
+    /* padding-bottom removido */
+}
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
 /* Header & Cart */
@@ -168,6 +174,64 @@ body { background-color: var(--bg-color); color: var(--text-main); padding-top: 
 .product-card { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
 .product-card.show-card { opacity: 1; transform: translateY(0); }
 
+/* ====================================================== */
+/* RODAPÉ PREMIUM MINIMALISTA                              */
+/* ====================================================== */
+.site-footer {
+    background: var(--header-bg);
+    color: #94A3B8;
+    padding: 30px 0;
+    margin-top: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-signature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 15px;
+    color: #94A3B8;
+}
+
+/* Badge do Github */
+.github-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #F8FAFC;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+}
+
+.github-badge svg {
+    transition: transform 0.3s ease;
+}
+
+.github-badge:hover {
+    background: var(--primary);
+    border-color: #3B82F6;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+}
+
+.github-badge:hover svg {
+    transform: rotate(12deg) scale(1.1);
+}
 /* ====================================================== */
 /* MEDIA QUERIES SEMPRE NO FINAL DO ARQUIVO               */
 /* ====================================================== */

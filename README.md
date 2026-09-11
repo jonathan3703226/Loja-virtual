@@ -16,7 +16,6 @@ E-commerce responsivo desenvolvido para simular a experiência de uma loja de te
 
 🔗 **[Acesse a aplicação em produção aqui](https://jonathan3703226.github.io/ecommerce-cart-js-html-css/)**
 
-🔗 **[Acesse a aplicação em produção aqui](https://jonathan3703226.github.io/ecommerce-cart-js-html-css/)**
 
 ## 🚀 O Projeto
 

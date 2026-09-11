@@ -258,16 +258,23 @@ class TechStore {
 
         // 2. Observer para tocar/pausar vídeos automaticamente
         const videos = document.querySelectorAll('video');
+        
+        // Verifica se a tela é mobile (limite de 900px)
+        const isMobile = window.innerWidth <= 900; 
+        
+        // Define threshold de 40% para celular e 60% para computador
+        const observerThreshold = isMobile ? 0.4 : 0.6; 
+        
         const videoObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Tenta dar play automaticamente (o navegador só permite se o vídeo tiver 'muted')
+                    // Tenta dar play automaticamente
                     entry.target.play().catch(() => { console.log("Autoplay bloqueado pelo navegador"); });
                 } else {
                     entry.target.pause();
                 }
             });
-        }, { threshold: 0.4}); // Dispara quando 60% do vídeo estiver centralizado na tela
+        }, { threshold: observerThreshold }); // Usa a regra criada acima
 
         videos.forEach(video => videoObserver.observe(video));
     }

@@ -280,29 +280,26 @@ class TechStore {
 
         parentContainer.dataset.currentIndex = mediaIndex;
 
-       if (media.type === 'video') {
-            // Coloca o vídeo com Autoplay Nativo ativado
+      if (media.type === 'video') {
+            // Cria o vídeo já com os atributos necessários
             container.innerHTML = `<video src="${media.src}" id="media-${productId}" autoplay loop muted playsinline></video>`;
 
-            // Aguarda um instante e avisa o navegador sobre o novo vídeo
-            setTimeout(() => {
-                const newVideo = document.getElementById(`media-${productId}`);
-                if (newVideo) {
-                    newVideo.play().catch(() => { });
-                    
-                    // Adiciona um Observer exclusivo para ESTE novo vídeo
-                    // (Resolve o bug do vídeo rodar escondido no celular ao rolar a tela)
-                    new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.play().catch(() => {});
-                            } else {
-                                entry.target.pause();
-                            }
-                        });
-                    }, { threshold: 0.6 }).observe(newVideo);
-                }
-            }, 50);
+            const newVideo = document.getElementById(`media-${productId}`);
+            if (newVideo) {
+                // Dá o play IMEDIATAMENTE após a criação, aproveitando o evento de clique original do usuário
+                newVideo.play().catch(() => { console.log("Autoplay retido pelo navegador"); });
+                
+                // Observador para pausar o vídeo caso o usuário role a tela para longe dele
+                new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.play().catch(() => {});
+                        } else {
+                            entry.target.pause();
+                        }
+                    });
+                }, { threshold: 0.2 }).observe(newVideo);
+            }
 
         } else {
             // Coloca a imagem normalmente

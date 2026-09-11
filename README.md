@@ -1,45 +1,59 @@
-# NexTech E-commerce Cart (Vanilla JS/HTML/CSS)
+# NexTech E-commerce Cart 🛒
 
-E-commerce responsivo desenvolvido para simular a experiência de uma loja de tecnologia. O foco arquitetural do projeto foi a construção de um carrinho de compras funcional, consumo de dados assíncrono e manipulação dinâmica do DOM utilizando exclusivamente JavaScript puro (Vanilla JS), sem frameworks.
+<div align="center">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/Status-Conclu%C3%ADdo-success?style=for-the-badge" alt="Status" />
+</div>
+<br>
 
-[Acesse a aplicação em produção aqui](https://www.google.com/search?q=https://jonathan3703226.github.io/ecommerce-cart-js-html-css/)
+> Uma aplicação front-end focada em simular a interatividade de um carrinho de compras avançado, culminando em uma etapa simplificada de checkout, construída exclusivamente com Vanilla JavaScript, HTML5 e CSS3.
 
-## Arquitetura e Interatividade (Vanilla JS)
+🔗 **[Acesse a aplicação em produção aqui](https://jonathan3703226.github.io/ecommerce-cart-js-html-css/)**
 
-Comportamentos de e-commerce gerenciados integralmente no lado do cliente, utilizando sintaxe moderna de JavaScript e APIs nativas do navegador. As implementações incluem:
+## 🚀 O Projeto
 
-* **Carrinho Persistente:** Gerenciamento de estado e armazenamento de itens no navegador do usuário via `localStorage`[cite: 2].
-* **Consumo Dinâmico (Fetch API):** Carregamento assíncrono do catálogo de produtos a partir de um arquivo `produtos.json`[cite: 1, 2].
-* **Manipulação do DOM:** Injeção dinâmica de cards de produtos, modais de detalhes e atualização em tempo real dos valores do carrinho[cite: 2].
-* **Interatividade Multimídia:** Efeito de zoom nativo em imagens por coordenadas do mouse e integração de vídeos na galeria com cursor customizado usando efeito de cor reversa (`mix-blend-mode`)[cite: 2, 3].
-* **Checkout Simulado:** Modal de finalização de compra com cálculo matemático de totais, exibição em formato de recibo e descontos dinâmicos baseados na forma de pagamento selecionada[cite: 2].
+O NexTech é um estudo de caso focado no desenvolvimento de regras de negócio no lado do cliente (Client-side) sem o uso de frameworks modernos. O objetivo principal é demonstrar domínio na manipulação dinâmica do DOM, gerenciamento de estado do carrinho e na criação de interfaces responsivas e acessíveis.
 
-## Stack Tecnológico
+**Diferencial de Portfólio (Refatoração e Arquitetura):**
+Este repositório serve como um laboratório de refatoração. A base inicial do projeto foi gerada de forma monolítica por Inteligência Artificial (disponível na branch `v1-ai-generated`). O meu trabalho consistiu em atuar como Arquiteto de Software para reescrever, otimizar e decompor a aplicação. Apliquei princípios de Orientação a Objetos, Clean Code, separação clara de responsabilidades e melhorias substanciais de UX/UI.
 
-* **HTML5:** Foco em estruturação semântica[cite: 4].
-* **CSS3:** Flexbox, Custom Properties (variáveis CSS), Media Queries e sobreposição de elementos (z-index, modais e tooltips)[cite: 3].
-* **JavaScript (ES6+):** Classes (`class TechStore`), Async/Await, tratamento de erros, Array Methods (`map`, `forEach`, `find`) e Event Listeners globais[cite: 2].
+## ✨ Funcionalidades (Features)
 
-## 🛠️ Qualidade do Código e Semântica
+*   **Catálogo Dinâmico:** Consumo assíncrono (Fetch API) dos dados dos produtos a partir de um arquivo `produtos.json`.
+*   **Carrinho Persistente:** Gerenciamento de estado que mantém os itens adicionados salvos no navegador do usuário utilizando `localStorage`, evitando perda de dados no recarregamento da página.
+*   **UX/UI Avançada:**
+    *   Galeria de mídia mista (fotos e vídeos) com suporte a *autoplay* inteligente usando `IntersectionObserver`.
+    *   Cursor customizado com efeito de cor reversa (`mix-blend-mode`) para interação imersiva com vídeos.
+    *   Efeito de lente de aumento (Zoom) nas imagens dos produtos, calculado dinamicamente com base nas coordenadas do cursor.
+*   **Simulação de Checkout:** Modal interativo focado no aspecto financeiro (sem autenticação/endereço), realizando cálculo matemático em tempo real de subtotais, aplicação de descontos dinâmicos baseados na forma de pagamento e exibição de um recibo formatado.
+*   **Feedback Visual Integrado:** Substituição de `alerts` e `prompts` nativos do navegador por componentes customizados de notificação (*Toasts*) e janelas modais.
 
-Para garantir as melhores práticas de desenvolvimento web e semântica estrutural, o código deste projeto foca em:
+## 🛠️ Tecnologias Utilizadas (Stack)
 
-* **HTML5:** Estruturação lógica com correta hierarquia de headings e utilização de tags semânticas como `<header>`, `<main>` e `<article>` para a renderização individual dos produtos[cite: 4].
-* **CSS3:** Modularização visual baseada em variáveis (`:root`) para padronização de cores e espaçamentos, garantindo um design responsivo sem repetição excessiva de regras[cite: 3].
-* **JavaScript:** Arquitetura orientada a objetos (POO), garantindo separação de responsabilidades (renderização, cálculo matemático, controle de UI) dentro de um único escopo isolado, evitando poluição do escopo global[cite: 2].
+*   **HTML5:** Estruturação lógica com hierarquia correta de headings e uso de tags semânticas (`<header>`, `<main>`, `<article>`).
+*   **CSS3:** Layouts construídos com Flexbox, padronização visual através de CSS Custom Properties (Variáveis) e Design 100% Responsivo adaptado via Media Queries.
+*   **JavaScript (ES6+):**
+    *   Arquitetura Orientada a Objetos com a classe `TechStore` para isolamento de escopo.
+    *   Uso de Promises e `Async/Await` para requisições.
+    *   Delegação de eventos globais (Event Delegation) para maior performance na manipulação do DOM.
 
-## Estrutura do Projeto
+## ⚙️ Como Executar Localmente
 
-* **Header / Carrinho:** Barra de navegação fixa com badge de notificação dinâmico e dropdown com a listagem de itens adicionados[cite: 4].
-* **Vitrine (Product List):** Layout em formato de listagem detalhada renderizando os dados consumidos do arquivo JSON[cite: 2, 4].
-* **Galeria Interativa:** Carrossel vertical contendo miniaturas de fotos e vídeos para cada produto[cite: 2, 3].
-* **Modais Informativos:** Telas modais reaproveitáveis que injetam a ficha técnica completa ou os detalhes do produto sob demanda[cite: 2].
-* **Resumo de Compra:** Tela final de checkout exibindo recibo em tabela e simulação de descontos[cite: 2].
+Por realizar requisições assíncronas (`fetch()`) para carregar o arquivo JSON, é necessário rodar o projeto através de um servidor HTTP local para evitar bloqueios de política de CORS do navegador.
 
-## Execução Local
+1. Clone este repositório:
 
-Por consumir dados de um arquivo JSON externo via `fetch()`, o projeto exige um servidor HTTP local para contornar a política de CORS dos navegadores[cite: 2].
+   ```bash
+   git clone https://github.com/jonathan3703226/ecommerce-cart-js-html-css.git
+   
+2. Abra a pasta do projeto na sua IDE de preferência (ex: VS Code).
 
-1. Clone o repositório: `git clone [https://github.com/jonathan3703226/ecommerce-cart-js-html-css.git](https://github.com/jonathan3703226/ecommerce-cart-js-html-css.git)`
-2. Abra a pasta do projeto em seu editor de código (como o VS Code).
-3. Utilize uma extensão como o **Live Server** e inicie o servidor (geralmente na porta `5500`) para executar a aplicação no navegador.
+3. Inicie um servidor local. Recomendamos a extensão Live Server do VS Code (porta padrão 5500).
+
+4. O navegador abrirá automaticamente a aplicação.
+
+
+ Conecte-se comigo no 🔗 **[LinkedIn](https://www.linkedin.com/in/jonathan-oliveira-ads/)**
+

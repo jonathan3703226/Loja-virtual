@@ -12,7 +12,7 @@ E-commerce responsivo desenvolvido para simular a experiência de uma loja de te
 
 > Uma aplicação front-end focada em simular a interatividade de um carrinho de compras avançado, culminando em uma etapa simplificada de checkout, construída exclusivamente com Vanilla JavaScript, HTML5 e CSS3.
 
-🔗 **[Acesse a aplicação em produção aqui](https://jonathan3703226.github.io/ecommerce-cart-js-html-css/)**
+🔗 **[Acesse a aplicação em produção aqui](https://jonathan3703226.github.io/ecommerce-cart/)**
 
 
 ## 🚀 O Projeto
@@ -49,7 +49,7 @@ Por realizar requisições assíncronas (`fetch()`) para carregar o arquivo JSON
 1. Clone este repositório:
 
    ```bash
-   git clone https://github.com/jonathan3703226/ecommerce-cart-js-html-css.git
+   git clone https://github.com/jonathan3703226/ecommerce-cart.git
    
 2. Abra a pasta do projeto na sua IDE de preferência (ex: VS Code).
 

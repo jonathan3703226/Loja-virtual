@@ -1,4 +1,4 @@
-# NexTech E-commerce Cart 🛒
+# E-commerce Cart 🛒
 
 <div align="center">
   <img src="https://img.shields.io/badge/HTML5-SEMÂNTICO-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
